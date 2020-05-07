@@ -40,11 +40,11 @@
           </div>
           <el-row class="extra-btn">
             <!-- <el-col :span="12">
-                            <span class="link" @click="toForgetPsd">忘记密码?</span>
+              <span class="link" @click="toForgetPsd">忘记密码?</span>
             </el-col>-->
-            <!-- <el-col :span="24" :style="{textAlign: 'right'}">
+            <el-col :span="24" :style="{textAlign: 'right'}">
               <span class="link" @click="toRenZheng">认证入口</span>
-            </el-col>-->
+            </el-col>
           </el-row>
         </div>
       </div>
