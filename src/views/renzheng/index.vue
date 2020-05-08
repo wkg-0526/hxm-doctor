@@ -25,13 +25,20 @@
         @nextTab="nextTab"
       />
       <!-- 第二步 -->
-      <material v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="material" />
+      <!-- <material v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="material" /> -->
+      <top v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" />
       <!-- 第三步 -->
-      <qualification
+      <!-- <qualification
         v-show="acitiveStep === 3"
         @nextStep="nextStep"
         @setData="setData"
         ref="qualification"
+      />-->
+      <doctorCer
+        v-show="acitiveStep === 3"
+        @nextStep="nextStep"
+        @setData="setData"
+        ref="doctorCer"
       />
       <!-- 第四步 -->
       <finish v-show="acitiveStep === 4" @nextStep="nextStep" @setData="setData" />
@@ -44,8 +51,10 @@
 import register from "./component/register";
 import login from "./component/login";
 import setPsd from "./component/setPsd";
-import material from "./component/material";
-import qualification from "./component/qualification";
+// import material from "./component/material";
+// import qualification from "./component/qualification";
+import doctorCer from "./component/doctorCer";
+import top from "./component/top";
 import headerLink from "./component/header.vue";
 import Api from "@/api/index.js";
 import { debuglog } from "util";
@@ -59,12 +68,14 @@ export default {
   name: "home",
   components: {
     register,
-    material,
-    qualification,
+    // material,
+    // qualification,
     headerLink,
     finish,
     login,
-    setPsd
+    setPsd,
+    doctorCer,
+    top
   },
   data() {
     return {
@@ -72,8 +83,8 @@ export default {
       navIndex: 0,
       acitiveTab: 1,
       acitiveStep: 1,
-      materialData: {},
-      qualificationData: {},
+      topData: {},
+      doctorCerData: {},
       detailData: {},
       type: "add"
     };
@@ -146,12 +157,12 @@ export default {
               fullName,
               telePhone,
               mailbox,
-              position,
+              position
 
               // 营业执照
-              businessLicense,
+              // businessLicense,
               // 机构许可证
-              institutionalLicense
+              // institutionalLicense
             } = res.data;
             let _time = format(time, "YYYY-MM-DD");
 
@@ -175,15 +186,7 @@ export default {
               address,
               type,
               introduce,
-              city: _arr
-              // imgUrl:hospitalLog
-            };
-            let obj2 = {
-              businessLicenseName,
-              creditCode
-            };
-
-            let obj3 = {
+              city: _arr,
               legalPerson,
               legalPersonIdNumber,
               legalPersonPhone,
@@ -191,16 +194,32 @@ export default {
               telePhone,
               mailbox,
               position
+              // imgUrl:hospitalLog
+            };
+            let obj2 = {
+              businessLicenseName,
+              creditCode
             };
 
-            this.$refs.material.formData = obj1;
-            this.$refs.material.imgUrl = hospitalLog;
+            // let obj3 = {
+            //   legalPerson,
+            //   legalPersonIdNumber,
+            //   legalPersonPhone,
+            //   fullName,
+            //   telePhone,
+            //   mailbox,
+            //   position
+            // };
 
-            this.$refs.qualification.formData1 = obj2;
-            this.$refs.qualification.formData2 = obj3;
+            this.$refs.top.formData = obj1;
+            this.$refs.top.imgUrl = hospitalLog;
 
-            this.$refs.qualification.imgUrl1 = businessLicense;
-            this.$refs.qualification.imgUrl2 = institutionalLicense;
+            // this.$refs.qualification.formData1 = obj2;
+            // this.$refs.qualification.formData2 = obj3;
+            this.$refs.doctorCer.formData1 = obj2;
+            // 暂定
+            // this.$refs.qualification.imgUrl1 = businessLicense;
+            // this.$refs.qualification.imgUrl2 = institutionalLicense;
           }
         })
         .catch(error => {});
@@ -239,7 +258,7 @@ export default {
     },
     onSubmit() {
       let params = {
-        ...this.materialData,
+        ...this.topData,
         ...this.qualificationData
       };
       // 处理数据
