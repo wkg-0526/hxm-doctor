@@ -35,7 +35,7 @@ export default {
         },
         url: {
             type: String,
-            default: '/validateCode.json?'
+            default: '/doctor/validateCode.json?'
         }
     },
     data () {
@@ -82,6 +82,7 @@ export default {
         codeSubmit(){
             this.$refs.form.validate((valid) => {
                 if (valid) {
+            
                     this.$emit('codeSubmit',this.form.code)
                 } else {
                     console.log('error submit!!');

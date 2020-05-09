@@ -228,21 +228,23 @@ export default {
       });
     },
     // 获取图形验证码
-    // getImgCode(){
-    // 	this.regUrl = '/validateCode.json?'+ Math.random()
-    // },
+    getImgCode(){
+    	this.regUrl = '/doctor/validateCode.json?'+ Math.random()
+    },
     // 图形验证码点击取消
     codeCancel() {
       this.codeVisible = false;
     },
     // 图形验证码点击确定
     codeSubmit(url) {
+      console.log(url)
       const { formData } = this;
       var p = new Promise((resolve, reject) => {
         Api.registerSendValidate({
           code: url,
           userPhone: formData.userPhone
         }).then(res => {
+          console.log(res.data)
           if (res.data.result === 1) {
             // 执行倒计时
             this.validateBtn();

@@ -47,6 +47,7 @@
             :disabled="loginDisabled"
           >下一步</el-button>
         </div>
+        <div @click="go">认证结果</div>
       </el-form>
     </div>
   </div>
@@ -181,6 +182,9 @@ export default {
     };
   },
   methods: {
+    go() {
+      this.$router.push({ path: "/result" });
+    },
     // 提交表单
     submitForm: function() {
       // this.$emit('nextStep', 2)
@@ -236,7 +240,7 @@ export default {
     },
     // 获取图形验证码
     getImgCode() {
-      this.regUrl = "/validateCode.json?" + Math.random();
+      this.regUrl = "/doctor/validateCode.json?" + Math.random();
     },
     // 图形验证码点击取消
     codeCancel() {

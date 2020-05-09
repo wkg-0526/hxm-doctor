@@ -1,19 +1,27 @@
-import axios from "axios"
-import { Message } from "element-ui"
-import router from "../router"
+import axios from "axios";
+import { Message } from "element-ui";
+import router from "../router";
 // import localDb from '../util/localDb'
-import qs from "qs"
+import qs from "qs";
 
 //系统所有请求路径
-const baseUrl = process.env.API_URL ? process.env.API_URL : ""
+const baseUrl = process.env.API_URL ? process.env.API_URL : "";
 
 var service = axios.create({
   baseURL: process.env.BASE_API,
   timeout: 60000
-})
+});
 
 function isLogin() {
-  return localDb.get("session")
+  return localDb.get("session");
+}
+// 判断是否是数组
+function isArrayFn(value) {
+  if (typeof Array.isArray === "function") {
+    return Array.isArray(value);
+  } else {
+    return Object.prototype.toString.call(value) === "[object Array]";
+  }
 }
 
 //添加请求拦截器
@@ -25,12 +33,12 @@ service.interceptors.request.use(
     // }else if(localDb.get('TOKEN',false)){
     //     config.headers['x-auth-token'] = localDb.get('TOKEN',false)
     // }
-    return config
+    return config;
   },
   function(error) {
-    return Promise.reject(error)
+    return Promise.reject(error);
   }
-)
+);
 
 //添加响应拦截器
 service.interceptors.response.use(
@@ -60,10 +68,10 @@ service.interceptors.response.use(
     //     localDb.set('TOKEN',response['headers']['x-auth-token'])
     // }
 
-    return response
+    return response;
   },
   function(error) {
-    console.log("err", error)
+    console.log("err", error);
     // 清空token，跳转到登陆页
     if (error && error.response) {
       if (error.response.status === 401) {
@@ -71,79 +79,93 @@ service.interceptors.response.use(
           message: error.response.data.error_msg,
           type: "error",
           duration: 4 * 1000
-        })
+        });
         // 清除TOKEN
 
         // 跳转页面
         router.replace({
           path: "login",
           query: { redirect: router.currentRoute.fullPath }
-        })
+        });
         // 无权限
       } else if (error.response.status === 403) {
         Message({
           message: "权限错误！",
           type: "error",
           duration: 4 * 1000
-        })
+        });
       } else {
         Message({
           message: error.response.data.error_massage,
           type: "error",
           duration: 4 * 1000
-        })
+        });
       }
     }
 
-    return Promise.resolve(error)
+    return Promise.resolve(error);
   }
-)
+);
 
 class Http {
   /* eslint-disable */
   get(url, params, callback) {
     // GET请求
-    const newUrl = params ? this.build(url, params) : url
+    const newUrl = params ? this.build(url, params) : url;
     let options = {
       method: "GET"
-    }
+    };
     // console.log(params,'sss')
     // if (params) options.body = params
-    return this.request(newUrl, options, callback)
+    return this.request(newUrl, options, callback);
   }
 
   post(url, body, callback) {
     // POST请求
     let options = {
       method: "POST"
-    }
-    if (body) options.body = body
-    return this.request(url, options, callback, 0)
+    };
+    if (body) options.body = body;
+    return this.request(url, options, callback, 0);
   }
 
   put(url, body, callback) {
     // PUT请求
     let options = {
       method: "PUT"
-    }
-    if (body) options.body = body
-    return this.request(url, options, callback, 0)
+    };
+    if (body) options.body = body;
+    return this.request(url, options, callback, 0);
   }
 
   delete(url, params, callback) {
     // DELETE请求
-    const newUrl = params ? this.build(url, params) : url
+    const newUrl = params ? this.build(url, params) : url;
     let options = {
       method: "DELETE"
-    }
+    };
     // console.log(params,'sss')
     // if (params) options.body = params
-    return this.request(newUrl, options, callback)
+    return this.request(newUrl, options, callback);
   }
+  // postRes(url, body, callback,resCallBack) { // POST请求
+  //     let options = {
+  //         method: 'POST'
+  //     }
+  //     if (body) options.body = JSON.stringify(body)
+  //     return this.request(url, options, callback,1)
+  // }
+  postAsFormData(url, params, callback) {
+    let options = {
+      method: "POST"
+    };
 
+    if (params) options.body = this.buildFormData(params);
+    return this.request(url, options, callback);
+  }
   downloadFile(url, params, callback) {
     // 下载文件
-    const newUrl = params ? this.build(url, params) : url
+    const newUrl = params ? this.build(url, params) : url;
     // let requestData = Object.assign({}, data, {
     //     accessToken: sessionStorage.getItem('accessToken')
     //   });
@@ -155,63 +177,46 @@ class Http {
         }
       })
       .then(resp => {
-        let headers = resp.headers
-        let contentType = headers["content-type"]
+        let headers = resp.headers;
+        let contentType = headers["content-type"];
 
         // console.log('响应头信息', headers);
         if (!resp.data) {
           //   console.error('响应异常：', resp);
-          return false
+          return false;
         } else {
           //   console.error('下载文件：', resp);
-          const blob = new Blob([resp.data], { type: contentType })
+          const blob = new Blob([resp.data], { type: contentType });
 
-          const contentDisposition = resp.headers["content-disposition"]
-          let fileName = "unknown"
+          const contentDisposition = resp.headers["content-disposition"];
+          let fileName = "unknown";
           if (contentDisposition) {
-            fileName = window.decodeURI(
-              resp.headers["content-disposition"].split("=")[1]
-            )
+            fileName = window.decodeURI(resp.headers["content-disposition"].split("=")[1]);
           }
           //   console.log('文件名称：', fileName);
           //   callback(blob, fileName)
-          this.downFile(blob, fileName)
+          this.downFile(blob, fileName);
         }
       })
       .catch(function(error) {
-        console.log(error)
-      })
+        console.log(error);
+      });
   }
   downFile(blob, fileName) {
     // 非IE下载
     if ("download" in document.createElement("a")) {
-      let link = document.createElement("a")
-      link.href = window.URL.createObjectURL(blob) // 创建下载的链接
-      link.download = fileName // 下载后文件名
-      link.style.display = "none"
-      document.body.appendChild(link)
-      link.click() // 点击下载
-      window.URL.revokeObjectURL(link.href) // 释放掉blob对象
-      document.body.removeChild(link) // 下载完成移除元素
+      let link = document.createElement("a");
+      link.href = window.URL.createObjectURL(blob); // 创建下载的链接
+      link.download = fileName; // 下载后文件名
+      link.style.display = "none";
+      document.body.appendChild(link);
+      link.click(); // 点击下载
+      window.URL.revokeObjectURL(link.href); // 释放掉blob对象
+      document.body.removeChild(link); // 下载完成移除元素
     } else {
       // IE10+下载
-      window.navigator.msSaveBlob(blob, fileName)
+      window.navigator.msSaveBlob(blob, fileName);
     }
-  }
-
-  // postRes(url, body, callback,resCallBack) { // POST请求
-  //     let options = {
-  //         method: 'POST'
-  //     }
-  //     if (body) options.body = JSON.stringify(body)
-  //     return this.request(url, options, callback,1)
-  // }
-  postAsFormData(url, params, callback) {
-    let options = {
-      method: "POST"
-    }
-    if (params) options.body = this.buildFormData(params)
-    return this.request(url, options, callback)
   }
 
   // postForm(url, form, callback) {
@@ -237,11 +242,11 @@ class Http {
           router.replace({
             path: "/login",
             query: { redirect: router.currentRoute.fullPath }
-          })
+          });
         } else {
           //模拟数据
           //请求返回处理
-          return res
+          return res;
         }
 
         // if (!res) {
@@ -268,9 +273,9 @@ class Http {
       })
       .catch(function(error) {
         // alert(2333)
-        console.log(error, "err")
-        return Promise.resolve(error)
-      })
+        console.log(error, "err");
+        return Promise.resolve(error);
+      });
   }
 
   defaultHeader() {
@@ -278,52 +283,44 @@ class Http {
     const header = {
       Accept: "*/*",
       "Content-Type": "application/json"
-    }
-    return header
+    };
+    return header;
   }
 
   build(url, params) {
     // URL构建方法
-    const ps = []
+    const ps = [];
     if (params) {
       for (let p in params) {
         if (p) {
-          ps.push(p + "=" + encodeURIComponent(params[p]))
+          ps.push(p + "=" + encodeURIComponent(params[p]));
         }
       }
     }
-    return url + "?" + ps.join("&")
+    return url + "?" + ps.join("&");
   }
 
   buildFormData(params) {
-    // 判断参数是对象还是数组
-    function isArrayFn(value) {
-      if (typeof Array.isArray === "function") {
-        return Array.isArray(value)
-      } else {
-        return Object.prototype.toString.call(value) === "[object Array]"
-      }
-    }
-    if (params) {
-      if (isArrayFn(params)) {
-        const data = new FormData()
-        // a = [{a: '111'},{b: '2222'}]
-        for (let p of params) {
-          console.log(p)
-          data.append(p.key, p.value)
+    if (!isArrayFn(params)) {
+      const data = new FormData();
+      for (let p in params) {
+        if (p) {
+          data.append(p, params[p]);
         }
-        return data
-      } else {
-        const data = new FormData()
-        for (let p in params) {
+      }
+      return data;
+    } else {
+      const data = new FormData(); // a = [{a: '111'},{b: '2222'}]
+      for (let p of params) {
+        for (let i in p) {
           if (p) {
-            data.append(p, params[p])
+            data.append(i, p[i]);
           }
         }
-        return data
       }
+      return data;
     }
   }
 }
 /* eslint-disable */
-export default new Http()
+export default new Http();

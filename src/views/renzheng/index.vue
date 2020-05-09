@@ -26,7 +26,8 @@
       />
       <!-- 第二步 -->
       <!-- <material v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="material" /> -->
-      <top v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" />
+      <tops v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" />
+      <!-- <top v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" /> -->
       <!-- 第三步 -->
       <!-- <qualification
         v-show="acitiveStep === 3"
@@ -40,6 +41,7 @@
         @setData="setData"
         ref="doctorCer"
       />
+      <!-- <bottom v-show="acitiveStep === 3" @nextStep="nextStep" @setData="setData" ref="doctorCer" /> -->
       <!-- 第四步 -->
       <finish v-show="acitiveStep === 4" @nextStep="nextStep" @setData="setData" />
     </div>
@@ -54,7 +56,9 @@ import setPsd from "./component/setPsd";
 // import material from "./component/material";
 // import qualification from "./component/qualification";
 import doctorCer from "./component/doctorCer";
-import top from "./component/top";
+import top from "./component/top-copy";
+import tops from "./component/top";
+import bottom from "./component/bottom";
 import headerLink from "./component/header.vue";
 import Api from "@/api/index.js";
 import { debuglog } from "util";
@@ -74,6 +78,8 @@ export default {
     finish,
     login,
     setPsd,
+    bottom,
+    tops,
     doctorCer,
     top
   },
@@ -135,70 +141,73 @@ export default {
     getInitData() {
       Api.findHospitalDetail({})
         .then(res => {
+          console.log(res.data, 123);
           if (res && res.status === 200) {
             // console.log(res.data);
 
             this.detailData = res.data;
+
             const {
-              hospitalName,
-              time,
+              fullName,
+              gender,
               country,
-              address,
-              type,
-              introduce,
-              hospitalLog,
-              city,
+              occupationTitle,
+              time,
+              portrait,
 
               businessLicenseName,
               creditCode,
-              legalPerson,
-              legalPersonIdNumber,
-              legalPersonPhone,
-              fullName,
-              telePhone,
+              telephone,
               mailbox,
-              position
 
+              // 执业证
+              certificateOfPractice,
+              // 个人介绍
+              introduction,
+              // 案例
+              caseDiagram,
               // 营业执照
-              // businessLicense,
+              businessLicense,
               // 机构许可证
-              // institutionalLicense
+              institutionalLicense,
+              otherCertificate,
+              beGoodAte
             } = res.data;
             let _time = format(time, "YYYY-MM-DD");
 
             // 城市回填
-            let _arr = [];
-            for (let obj of cityData) {
-              for (let o of obj.children) {
-                if (o.value === city) {
-                  // console.log(obj.value,city)
-                  _arr.push(obj.value);
-                  _arr.push(city);
-                  break;
-                }
-              }
-            }
+            // let _arr = [];
+            // for (let obj of cityData) {
+            //   for (let o of obj.children) {
+            //     if (o.value === city) {
+            //       // console.log(obj.value,city)
+            //       _arr.push(obj.value);
+            //       _arr.push(city);
+            //       break;
+            //     }
+            //   }
+            // }
 
             let obj1 = {
-              hospitalName,
-              time: _time,
-              country,
-              address,
-              type,
-              introduce,
-              city: _arr,
-              legalPerson,
-              legalPersonIdNumber,
-              legalPersonPhone,
               fullName,
-              telePhone,
+              gender,
+              country,
+              occupationTitle,
+              time,
+              portrait,
+              time: _time,
+              telephone,
               mailbox,
-              position
+              beGoodAte
               // imgUrl:hospitalLog
             };
             let obj2 = {
-              businessLicenseName,
-              creditCode
+              introduction,
+              caseDiagram,
+
+              institutionalLicense,
+              certificateOfPractice,
+              otherCertificate
             };
 
             // let obj3 = {
@@ -212,11 +221,25 @@ export default {
             // };
 
             this.$refs.top.formData = obj1;
-            this.$refs.top.imgUrl = hospitalLog;
+            this.$refs.top.imgUrl = portrait;
 
-            // this.$refs.qualification.formData1 = obj2;
-            // this.$refs.qualification.formData2 = obj3;
             this.$refs.doctorCer.formData1 = obj2;
+            console.log(this.$refs.doctorCer.caseDiagramFile);
+            // 案例
+            this.$refs.doctorCer.caseDiagramFile = caseDiagram;
+            this.$refs.doctorCer.introductionFile = introduction;
+            this.$refs.doctorCer.institutionalLicenseFile = institutionalLicense;
+            this.$refs.doctorCer.certificateOfPracticeFile = certificateOfPractice;
+            this.$refs.doctorCer.otherCertificateFile = otherCertificate;
+            // 个人介绍
+            // this.$refs.doctorCer.imgUrl1 = introduction;
+            // this.$refs.doctorCer.imgUrl2 = institutionalLicense;
+            // this.$refs.top.formData = obj1;
+            // this.$refs.top.imgUrl = hospitalLog;
+
+            // this.$refs.doctorCer.formData1 = obj2;
+            // this.$refs.qualification.formData2 = obj3;
+            // this.$refs.doctorCer.formData1 = obj2;
             // 暂定
             // this.$refs.qualification.imgUrl1 = businessLicense;
             // this.$refs.qualification.imgUrl2 = institutionalLicense;
@@ -224,6 +247,99 @@ export default {
         })
         .catch(error => {});
     },
+    // getInitData() {
+    //   const { userId } = this;
+    //   Api.operatefindDoctorDeatail({
+    //     userId
+    //   })
+    //     .then(res => {
+    //       if (res && res.status === 200) {
+    //         // console.log(res.data);
+
+    //         this.detailData = res.data;
+    //         const {
+    //           fullName,
+    //           gender,
+    //           country,
+    //           occupationTitle,
+    //           time,
+    //           portrait,
+
+    //           businessLicenseName,
+    //           creditCode,
+    //           legalPerson,
+    //           legalPersonIdNumber,
+    //           legalPersonPhone,
+    //           telephone,
+    //           mailbox,
+    //           position,
+    //           // 个人介绍
+    //           introduction,
+    //           // 案例
+    //           caseDiagram,
+    //           // 营业执照
+    //           businessLicense,
+    //           // 机构许可证
+    //           institutionalLicense,
+    //           beGoodAte
+    //         } = res.data;
+
+    //         let _time = format(time, "YYYY-MM-DD");
+
+    //         // /operate/upload.json
+
+    //         // 城市回填
+    //         // let _arr = []
+    //         // for(let obj of cityData){
+    //         //     for(let o of obj.children){
+    //         //         if(o.value === city){
+    //         //             // console.log(obj.value,city)
+    //         //             _arr.push(obj.value);
+    //         //             _arr.push(city);
+    //         //             break
+    //         //         }
+    //         //     }
+    //         // }
+
+    //         let obj1 = {
+    //           fullName,
+    //           gender,
+    //           country,
+    //           occupationTitle,
+    //           time,
+    //           portrait,
+    //           time: _time
+    //           // imgUrl:hospitalLog
+    //         };
+    //         let obj2 = {
+    //           businessLicenseName,
+    //           creditCode
+    //         };
+
+    //         let obj3 = {
+    //           // legalPerson,
+    //           // legalPersonIdNumber,
+    //           // legalPersonPhone,
+    //           telephone,
+    //           mailbox,
+    //           beGoodAte
+    //           // position
+    //         };
+
+    //         this.$refs.top.formData = obj1;
+    //         this.$refs.top.imgUrl = portrait;
+
+    //         this.$refs.bottom.formData1 = obj2;
+    //         this.$refs.bottom.formData2 = obj3;
+    //         // 案例
+    //         this.$refs.bottom.caseDiagramFile = caseDiagram;
+    //         // 个人介绍
+    //         this.$refs.bottom.imgUrl1 = introduction;
+    //         this.$refs.bottom.imgUrl2 = institutionalLicense;
+    //       }
+    //     })
+    //     .catch(error => {});
+    // },
     login() {
       let param = {};
       Api.hospitalLogin(params)
@@ -259,16 +375,35 @@ export default {
     onSubmit() {
       let params = {
         ...this.topData,
-        ...this.qualificationData
+        ...this.doctorCerData
       };
+      console.log(params, this.doctorCerData);
       // 处理数据
-      params.city = params.city[params.city.length - 1];
+      let arr = [];
+      let files = [
+        "certificateOfPracticeFile",
+        "qualificationsFile",
+        "caseDiagramFile",
+        "otherCertificateFile",
+        "introductionFile"
+      ];
+      for (let p in params) {
+        if (files.includes(p)) {
+          params[p].forEach(val => {
+            arr.push({ [p]: val });
+          });
+        } else {
+          arr.push({ [p]: params[p] });
+        }
+      }
+      // params.city = params.city[params.city.length - 1];
       //
-      this.$refs.qualification.disabled = true;
+      console.log(arr);
+      this.$refs.doctorCer.disabled = true;
       if (this.type === "edit") {
-        Api.updateHospital(params)
+        Api.updateHospital(arr)
           .then(res => {
-            this.$refs.qualification.disabled = false;
+            this.$refs.doctorCer.disabled = false;
             console.log(res, "res");
             if (res && res.data && res.data.result === 500) {
               this.$message({
@@ -297,7 +432,7 @@ export default {
       } else {
         Api.insertAuthenticationHospital(params)
           .then(res => {
-            this.$refs.qualification.disabled = false;
+            this.$refs.doctorCer.disabled = false;
             console.log(res, "res");
             if (res && res.data && res.data.result === 500) {
               this.$message({

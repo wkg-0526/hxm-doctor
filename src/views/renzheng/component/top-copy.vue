@@ -1,6 +1,5 @@
 <template>
   <div class="top-box">
-    <div class="material-tip">请填写下方认证医生所需的资料</div>
     <div class="form">
       <el-form
         ref="form"
@@ -10,30 +9,14 @@
         label-position="left"
       >
         <el-row>
-          <el-col :span="24">
-            <el-form-item label="头像" prop="portraitFile">
-              <label for="fileInput">
-                <el-avatar :size="100" class="avartar pointer" v-show="!imgUrl" shape="square">点击上传</el-avatar>
-                <el-avatar
-                  :size="100"
-                  :src="imgUrl"
-                  fit="contain"
-                  v-show="imgUrl"
-                  class="pointer"
-                  shape="square"
-                ></el-avatar>
-                <input id="fileInput" type="file" class="el-upload__input" @change="fileChange" />
-              </label>
-            </el-form-item>
-          </el-col>
-          <el-col :span="12">
+          <el-col :span="12" class="form-left">
             <el-row :gutter="80">
-              <el-col :span="24">
+              <el-col :span="12">
                 <el-form-item label="姓名" prop="fullName">
                   <el-input v-model="formData.fullName" class="input w188" placeholder="请输入"></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="24">
+              <el-col :span="12">
                 <el-form-item label="性别" prop="gender" label-width="100px">
                   <el-select v-model="formData.gender" placeholder="请选择" class="input w188">
                     <el-option label="男" value="男"></el-option>
@@ -44,14 +27,14 @@
               </el-col>
             </el-row>
             <el-row :gutter="80" class="top-item">
-              <el-col :span="24">
+              <el-col :span="12">
                 <el-form-item label="国家" prop="country">
                   <el-select v-model="formData.country" placeholder="请选择" class="input w188">
                     <el-option label="中国" value="中国"></el-option>
                   </el-select>
                 </el-form-item>
               </el-col>
-              <el-col :span="24">
+              <el-col :span="12">
                 <el-form-item label="选择职称" prop="occupationTitle">
                   <el-select
                     v-model="formData.occupationTitle"
@@ -71,40 +54,32 @@
                 v-model="formData.time"
                 type="date"
                 placeholder="请选择"
-                class="input"
+                class="input w300"
                 value-format="yyyy-MM-dd"
                 format="yyyy-MM-dd"
               ></el-date-picker>
             </el-form-item>
           </el-col>
-        </el-row>
-        <el-row>
-          <el-form-item label="手机号码" prop="telephone">
-            <el-input v-model="formData.telephone" class="input" placeholder="请输入"></el-input>
-          </el-form-item>
-
-          <el-form-item label="电子邮箱" prop="mailbox">
-            <el-input v-model="formData.mailbox" class="input" placeholder="请输入"></el-input>
-          </el-form-item>
-
-          <el-form-item label="擅长项目" prop="beGoodAte" label-width="100px">
-            <el-select
-              v-model="formData.beGoodAte"
-              placeholder="请选择"
-              class="input w188"
-              multiple
-              :multiple-limit="1"
-              @change="onChange"
-            >
-              <template v-for="(v,index) in classificationoptions">
-                <el-option :label="v.name" :value="v.name" :key="index"></el-option>
-              </template>
-            </el-select>
-          </el-form-item>
+          <el-col :span="12" class="form-right">
+            <el-form-item label prop="portraitFile" label-width="0px">
+              <label for="fileInput">
+                <el-avatar :size="100" class="avartar pointer" v-show="!imgUrl" shape="square">点击上传</el-avatar>
+                <el-avatar
+                  :size="100"
+                  :src="imgUrl"
+                  fit="contain"
+                  v-show="imgUrl"
+                  class="pointer"
+                  shape="square"
+                ></el-avatar>
+                <input id="fileInput" type="file" class="el-upload__input" @change="fileChange" />
+              </label>
+            </el-form-item>
+          </el-col>
         </el-row>
         <div class="btnBox">
           <el-button class="button" size="medium" @click="toBack" round>返回上一步</el-button>
-          <el-button size="medium" type="primary" @click="submitForm" round>下一步</el-button>
+          <el-button size="medium" type="primary" @click="submitForm" round :disabled="disabled">下一步</el-button>
         </div>
       </el-form>
     </div>
@@ -128,9 +103,7 @@
     padding-left: 25px;
   }
   .form {
-    // padding-left: 85px;
-    width: 400px;
-    margin: 0 auto;
+    padding-left: 85px;
     .input {
       width: 300px;
     }
@@ -159,12 +132,11 @@
 
 <script>
 // import city from '../component/city.js';
-import classification from "@/components/goodClassification.js";
 import Api from "@/api/index.js";
 export default {
   created: function() {},
   mounted: function() {
-    this.getCategory();
+    // this.getCooperationModeOption();
     //console.log(this.$router.path);
   },
   data() {
@@ -193,19 +165,8 @@ export default {
         callback();
       }
     };
-    let verifyPhone = function(rule, value, callback) {
-      let val = value && value.trim();
-      if (!val) {
-        callback("请输入手机号");
-      } else if (!/^1[345678]\d{9}$/.test(val)) {
-        callback("手机号格式错误");
-      } else {
-        callback();
-      }
-    };
 
     return {
-      classificationoptions: [],
       /* 表单数据 */
       formData: {
         fullName: "",
@@ -214,9 +175,7 @@ export default {
         gender: "",
         occupationTitle: "",
         portraitFile: "",
-        beGoodAte: [],
-        telephone: "",
-        mailbox: ""
+        cooperationModeId: ""
       },
       // city: city,
       imgUrl: "",
@@ -225,36 +184,27 @@ export default {
         fullName: [{ required: true, message: "请输入姓名", trigger: "blur" }],
         time: [{ required: true, message: "请选择从业时间", trigger: "change" }],
         country: [{ required: true, message: "请选择国家", trigger: "change" }],
-        occupationTitle: [{ required: true, message: "请选择职称", trigger: "change" }],
-        telephone: [{ required: true, trigger: "blur", validator: verifyPhone }],
-        mailbox: [{ required: true, message: "请输入电子邮箱", trigger: "blur" }],
-        beGoodAte: [{ required: true, message: "请选择擅长项目", trigger: "change", type: "array" }]
-      }
+        occupationTitle: [{ required: true, message: "请选择职称", trigger: "change" }]
+      },
+      // 获取平台合作模式
+      cooperationModeOption: []
     };
   },
   methods: {
-    getCategory() {
-      Api.findSystemCategory({})
-        .then(res => {
-          if (res && res.status === 200) {
-            let _classificationoptions = res.data.category.map(v => {
-              return {
-                key: v,
-                name: v
-              };
-            });
-            _classificationoptions.unshift({
-              key: "",
-              name: "全部"
-            });
-            this.classificationoptions = _classificationoptions;
-          }
-        })
-        .catch(error => {});
-    },
-    onChange(e) {
-      // console.log(e,'e');
-    },
+    /**
+     * @description: 获取平台合作模式
+     * @param {type}
+     * @return:
+     */
+    // getCooperationModeOption() {
+    //   Api.findCooperationModeAll({})
+    //     .then(res => {
+    //       if (res && res.data) {
+    //         this.cooperationModeOption = res.data;
+    //       }
+    //     })
+    //     .catch(error => {});
+    // },
     // 提交表单
     submitForm: function() {
       var p = new Promise((resolve, reject) => {
@@ -266,18 +216,17 @@ export default {
           if (valid) {
             this.$emit("setData", { topData: this.formData });
             this.$emit("nextStep", 3);
-            // this.$nextTick(() => {
-            //   resolve();
-            // });
+            this.$nextTick(() => {
+              resolve();
+            });
           } else {
           }
         });
       });
       return p;
     },
-
     toBack() {
-      this.$emit("nextStep", 1);
+      this.$emit("nextStep", 2);
     },
     fileChange(e) {
       const self = this;
@@ -342,10 +291,7 @@ export default {
         fullName: "",
         time: "",
         country: "中国",
-        portraitFile: "",
-        beGoodAte: [],
-        telephone: "",
-        mailbox: ""
+        portraitFile: ""
       };
       this.imgUrl = "";
       this.$refs["form"].resetFields();

@@ -1,6 +1,6 @@
+<!--医生超管 图片上传是二进制形式-->
 <template>
   <div class="qualification-box">
-    <div class="qualification-title">请提交医生的资质证明材料</div>
     <div class="form form1">
       <el-form ref="form1" :model="formData1" label-width="100px" label-position="left">
         <uploadLink
@@ -37,28 +37,40 @@
           :formData="formData1"
           title="个人介绍"
           ref="introductionFile"
-        />
-        <!-- <el-form-item label="个人介绍">
-          <label for="introductionFile">
-            <div class="img pointer" v-show="!imgUrl1">+</div>
-            <el-image
-              style="width: 328px; height: 180px"
-              :src="imgUrl1"
-              v-show="imgUrl1"
-              class="pointer"
-            ></el-image>
-
-            <input id="introductionFile" type="file" class="el-upload__input" @change="fileChange1" />
-          </label>
-        </el-form-item>-->
-        <!-- <uploadLink
-          :fileList="introductionFile"
-          fileListName="introductionFile"
-          :formData="formData1"
-          title="个人介绍"
-          ref="introductionFile"
           :maxLength="9"
-        />-->
+        />
+      </el-form>
+    </div>
+    <div class="form">
+      <el-form
+        ref="form2"
+        :rules="rules2"
+        :model="formData2"
+        label-width="100px"
+        label-position="left"
+      >
+        <el-form-item label="手机号码" prop="telephone">
+          <el-input v-model="formData2.telephone" class="input" placeholder="请输入"></el-input>
+        </el-form-item>
+
+        <el-form-item label="电子邮箱" prop="mailbox">
+          <el-input v-model="formData2.mailbox" class="input" placeholder="请输入"></el-input>
+        </el-form-item>
+
+        <el-form-item label="擅长项目" prop="beGoodAte" label-width="100px">
+          <el-select
+            v-model="formData2.beGoodAte"
+            placeholder="请选择"
+            class="input w188"
+            multiple
+            :multiple-limit="1"
+            @change="onChange"
+          >
+            <template v-for="(v,index) in classificationoptions">
+              <el-option :label="v.name" :value="v.name" :key="index"></el-option>
+            </template>
+          </el-select>
+        </el-form-item>
         <div class="btnBox">
           <el-button class="button" size="medium" @click="toBack" round>返回上一步</el-button>
           <el-button size="medium" type="primary" @click="submitForm" round :disabled="disabled">下一步</el-button>
@@ -77,15 +89,9 @@
     text-align: center;
   }
   .form {
-    width: 400px;
-    margin: 0 auto;
+    padding-left: 85px;
     .input {
       width: 300px;
-    }
-    .btnBox {
-      padding-bottom: 30px;
-      display: flex;
-      justify-content: space-between;
     }
   }
   .desc {
@@ -94,7 +100,7 @@
     padding-top: 15px;
   }
   .form1 {
-    width: 400px;
+    width: 670px;
     .input {
       width: 328px;
     }
@@ -136,20 +142,18 @@
   position: relative;
   overflow: hidden;
 }
-.qualification-box {
-  .el-form-item.is-required:not(.is-no-asterisk)
-    .el-form-item__label-wrap
-    > .el-form-item__label:before,
-  .el-form-item.is-required:not(.is-no-asterisk) > .el-form-item__label:before {
-    content: "";
-    margin-right: 0px;
-  }
-}
+// .qualification-box {
+// 	.el-form-item.is-required:not(.is-no-asterisk) .el-form-item__label-wrap>.el-form-item__label:before, .el-form-item.is-required:not(.is-no-asterisk)>.el-form-item__label:before{
+// 		content: '';
+// 		margin-right: 0px;
+// 	}
+// }
 </style>
 
 
 <script>
 import uploadLink from "./upload";
+import Api from "@/api/index.js";
 // import classification from "@/components/goodClassification.js";
 export default {
   components: {
@@ -157,6 +161,7 @@ export default {
   },
   created: function() {},
   mounted: function() {
+    this.getCategory();
     //console.log(this.$router.path);
   },
   data() {
@@ -181,40 +186,68 @@ export default {
     };
 
     return {
-      // goodAtOption: classification.goodAt,
-      /* 表单数据 */
       classificationoptions: [],
       /* 表单数据 */
-
       formData1: {},
-      // formData2: {
-      //   beGoodAte: [],
-      //   telephone: "",
-      //   mailbox: ""
-      // },
-      // imgUrl1: "",
+      formData2: {
+        beGoodAte: [],
+        telephone: "",
+        mailbox: ""
+      },
+      // 个人介绍
+      introductionFile: [],
       // 资格证
       qualificationsFile: [],
       // 执业证
       certificateOfPracticeFile: [],
       // 亲自主刀案例
       caseDiagramFile: [],
-      // 个人介绍
-      introductionFile: [],
       // 其他证明
       otherCertificateFile: [],
-      // rules2: {
-      //   telephone: [{ required: true, trigger: "blur", validator: verifyPhone }],
-      //   mailbox: [{ required: true, message: "请输入电子邮箱", trigger: "blur" }],
-      //   beGoodAte: [{ required: true, message: "请选择擅长项目", trigger: "change", type: "array" }]
-      // },
+      rules2: {
+        telephone: [{ required: true, trigger: "blur", validator: verifyPhone }],
+        mailbox: [{ required: true, message: "请输入电子邮箱", trigger: "blur" }],
+        beGoodAte: [
+          {
+            required: true,
+            message: "请选择擅长项目",
+            trigger: "change",
+            type: "array"
+          }
+        ]
+      },
       disabled: false
     };
   },
   methods: {
+    /**
+     * @description: 获取类目
+     * @param {type}
+     * @return:
+     */
+    getCategory() {
+      Api.findSystemCategory({})
+        .then(res => {
+          if (res && res.status === 200) {
+            let _classificationoptions = res.data.category.map(v => {
+              return {
+                key: v,
+                name: v
+              };
+            });
+            _classificationoptions.unshift({
+              key: "",
+              name: "全部"
+            });
+            this.classificationoptions = _classificationoptions;
+          }
+        })
+        .catch(error => {});
+    },
     onChange(e) {
       // console.log(e,'e');
     },
+
     // 提交表单
     submitForm: function() {
       var p = new Promise((resolve, reject) => {
@@ -240,24 +273,25 @@ export default {
         }
 
         let _pass1 = false;
-        // let _pass2 = false;
+        let _pass2 = false;
         this.$refs.form1.validate(valid => {
           if (valid) {
             _pass1 = true;
           } else {
           }
         });
-        // this.$refs.form2.validate(valid => {
-        //   if (valid) {
-        //     _pass2 = true;
-        //   } else {
-        //   }
-        // });
-        if (_pass1) {
+        this.$refs.form2.validate(valid => {
+          if (valid) {
+            _pass2 = true;
+          } else {
+          }
+        });
+        if (_pass1 && _pass2) {
           this.$emit(
             "setData",
             {
               doctorCerData: {
+                ...this.formData2,
                 // 资格证
                 qualificationsFile: this.qualificationsFile,
                 // 执业证
@@ -321,18 +355,19 @@ export default {
       this.certificateOfPracticeFile = [];
       this.caseDiagramFile = [];
       this.introductionFile = [];
-      // this.formData2 = {
-      //   beGoodAte: [],
-      //   telephone: "",
-      //   mailbox: ""
-      // };
+
+      this.formData2 = {
+        beGoodAte: [],
+        telephone: "",
+        mailbox: ""
+      };
       this.$refs.qualificationsFile.reset();
       this.$refs.certificateOfPracticeFile.reset();
       this.$refs.caseDiagramFile.reset();
       this.$refs.otherCertificateFile.reset();
       this.$refs.introductionFile.reset();
       // this.$refs['form2'].resetFields();
-      // this.$refs["form2"].resetFields();
+      this.$refs["form2"].resetFields();
     }
   }
 };

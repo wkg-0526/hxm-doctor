@@ -32,7 +32,7 @@ import Login from "./views/login.vue";
 // import PictureIndex from "./views/picture/index.vue";
 // 认证处理
 // import authIndex from "./views/auth/index.vue";
-// import authDetail from "./views/auth/detail.vue";
+import authDetail from "./views/auth/detail.vue";
 
 // 认证流程
 import renzhengIndex from "./views/renzheng/index.vue";
@@ -334,26 +334,26 @@ export default new Router({
     //   component: modifyPsd,
     // },
     // {
-    //   path: "/auth",
-    //   name: "认证处理",
-    //   icon: "iconrenzheng1",
-    //   hidden: true,
-    //   component: Wrapper,
-    //   children: [
-    //     {
-    //       path: "authIndex",
-    //       name: "普通用户管理",
-    //       component: authIndex
-    //     },
-    //     {
-    //       path: "authDetail",
-    //       name: "认证详情",
-    //       hidden: true,
-    //       component: authDetail
-    //       // component: () =>
-    //       //   import(/* webpackChunkName: "about" */ "./views/auth/detail.vue")
-    //     }
-    //   ]
+    // path: "/auth",
+    // name: "认证处理",
+    // icon: "iconrenzheng1",
+    // hidden: false,
+    // component: Wrapper,
+    // children: [
+    // {
+    //   path: "authIndex",
+    //   name: "普通用户管理",
+    //   component: authIndex
+    // },
+    // {
+    //   path: "authDetail",
+    //   name: "认证详情",
+    //   hidden: false,
+    //   component: authDetail
+    //   // component: () =>
+    //   //   import(/* webpackChunkName: "about" */ "./views/auth/detail.vue")
+    // }
+    // ]
     // },
     {
       path: "/renzheng",
