@@ -3,7 +3,7 @@
     <div class="qualification-title">请提交医生的资质证明材料</div>
     <div class="form form1">
       <el-form ref="form1" :model="formData1" label-width="100px" label-position="left">
-        <uploadLink
+        <!-- <uploadLink
           :fileList="qualificationsFile"
           fileListName="qualificationsFile"
           :formData="formData1"
@@ -37,7 +37,187 @@
           :formData="formData1"
           title="个人介绍"
           ref="introductionFile"
-        />
+        />-->
+        <el-row>
+          <el-col>
+            <el-form-item label="医师执业证">
+              <div
+                v-for="(item,
+                    index) in certificateOfPracticeFile"
+                :key="index"
+                class="img-item-wrapper"
+              >
+                <img
+                  :style="{ float: 'left' }"
+                  class="img-item"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                />
+                <i
+                  class="el-icon-error img-close-icon pointer"
+                  @click="delCertificateOfPractice(index)"
+                ></i>
+              </div>
+              <el-upload
+              v-show="certificateOfPracticeFile.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleCertificateOfPractice"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+              <div class="desc">请上传应用高清图片，最大3M</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="医师资格证">
+              <div
+                v-for="(item,
+                    index) in qualificationsFile"
+                :key="index"
+                class="img-item-wrapper"
+              >
+                <img
+                  :style="{ float: 'left' }"
+                  class="img-item"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                />
+                <i class="el-icon-error img-close-icon pointer" @click="delQualifications(index)"></i>
+              </div>
+              <el-upload
+               v-show="qualificationsFile.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleQualifications"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+              <div class="desc">请上传应用高清图片，最大3M</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="案例图">
+              <div
+                v-for="(item,
+                    index) in caseDiagramFile"
+                :key="index"
+                class="img-item-wrapper"
+              >
+                <img
+                  :style="{ float: 'left' }"
+                  class="img-item"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                />
+                <i class="el-icon-error img-close-icon pointer" @click="delCaseDiagram(index)"></i>
+              </div>
+              <el-upload
+              v-show="caseDiagramFile.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleCaseDiagram"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+              <div class="desc">请上传应用高清图片，最大3M</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-form-item label="其他证书">
+              <div
+                v-for="(item,
+                    index) in otherCertificateFile"
+                :key="index"
+                class="img-item-wrapper"
+              >
+                <img
+                  :style="{ float: 'left' }"
+                  class="img-item"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                />
+                <i class="el-icon-error img-close-icon pointer" @click="delOtherCertificate(index)"></i>
+              </div>
+              <el-upload
+              v-show="otherCertificateFile.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleOtherCertificate"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+              <div class="desc">请上传应用高清图片，最大3M</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-form-item label="个人介绍">
+              <div
+                v-for="(item,
+                    index) in introductionFile"
+                :key="index"
+                class="img-item-wrapper"
+              >
+                <img
+                  :style="{ float: 'left' }"
+                  class="img-item"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                />
+                <i class="el-icon-error img-close-icon pointer" @click="delIntroduction(index)"></i>
+              </div>
+              <el-upload
+               v-show="introductionFile.length < 9"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleIntroduction"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+              <div class="desc">请上传应用高清图片，最大3M</div>
+            </el-form-item>
+          </el-col>
+        </el-row>
         <!-- <el-form-item label="个人介绍">
           <label for="introductionFile">
             <div class="img pointer" v-show="!imgUrl1">+</div>
@@ -86,6 +266,22 @@
       padding-bottom: 30px;
       display: flex;
       justify-content: space-between;
+    }
+    .img-item-wrapper {
+      position: relative;
+      display: inline-block;
+      margin-right: 20px;
+      vertical-align: top;
+      img {
+        vertical-align: top;
+        display: inline-block;
+        width: 110px;
+      }
+      i {
+        position: absolute;
+        right: -7px;
+        top: -7px;
+      }
     }
   }
   .desc {
@@ -283,6 +479,61 @@ export default {
     },
     setData(key, value) {
       this[key] = value;
+    },
+    beforeAvatarUpload(file) {
+      const _type = ["image/jpeg", "image/png", "image/jpg", "image/bmp"];
+      const isLt10M = file.size / 1024 / 1024 < 3;
+      if (!_type.includes(file.type)) {
+        this.$message.warning("图片格式错误!");
+        return false;
+      }
+
+      if (!isLt10M) {
+        this.$message.warning("图片大小不能超过 10MB!");
+        return false;
+      }
+      return true;
+    },
+    // 执业证上传
+    handleRemove(file, fileList) {
+      console.log(file, fileList);
+    },
+    handleCertificateOfPractice(res, file) {
+      console.log(res);
+      this.certificateOfPracticeFile.push(res.url[0]);
+    },
+    delCertificateOfPractice(index) {
+      this.certificateOfPracticeFile.splice(index, 1);
+    },
+    // 案例图上传
+    handleCaseDiagram(res, file) {
+      // console.log(res)
+      this.caseDiagramFile.push(res.url[0]);
+    },
+    delCaseDiagram(index) {
+      this.caseDiagramFile.splice(index, 1);
+    },
+    // 资格证书上传
+    handleQualifications(res, file) {
+      console.log(res, this.qualificationsFile);
+      this.qualificationsFile.push(res.url[0]);
+    },
+    delQualifications(index) {
+      this.qualificationsFile.splice(index, 1);
+    },
+    // 其他证书上传
+    handleOtherCertificate(res, file) {
+      this.otherCertificateFile.push(res.url[0]);
+    },
+    delOtherCertificate(index) {
+      this.otherCertificateFile.splice(index, 1);
+    },
+    // 个人介绍
+    handleIntroduction(res, file) {
+      this.introductionFile.push(res.url[0]);
+    },
+    delIntroduction(index) {
+      this.introductionFile.splice(index, 1);
     },
     fileChange1(e, fileName, imgUrl) {
       console.log(fileName, "heiheihei");

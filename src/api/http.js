@@ -312,11 +312,12 @@ class Http {
     } else {
       const data = new FormData(); // a = [{a: '111'},{b: '2222'}]
       for (let p of params) {
-        for (let i in p) {
-          if (p) {
-            data.append(i, p[i]);
-          }
-        }
+        // for (let i in p) {
+        //   if (p) {
+        //     data.append(i, p[i]);
+        //   }
+        // }
+        data.append(p.key,p.value)
       }
       return data;
     }

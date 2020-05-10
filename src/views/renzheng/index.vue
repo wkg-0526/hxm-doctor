@@ -155,8 +155,7 @@ export default {
               time,
               portrait,
 
-              businessLicenseName,
-              creditCode,
+             
               telephone,
               mailbox,
 
@@ -167,9 +166,9 @@ export default {
               // 案例
               caseDiagram,
               // 营业执照
-              businessLicense,
+
+              qualifications,
               // 机构许可证
-              institutionalLicense,
               otherCertificate,
               beGoodAte
             } = res.data;
@@ -205,7 +204,7 @@ export default {
               introduction,
               caseDiagram,
 
-              institutionalLicense,
+              qualifications,
               certificateOfPractice,
               otherCertificate
             };
@@ -228,7 +227,7 @@ export default {
             // 案例
             this.$refs.doctorCer.caseDiagramFile = caseDiagram;
             this.$refs.doctorCer.introductionFile = introduction;
-            this.$refs.doctorCer.institutionalLicenseFile = institutionalLicense;
+            this.$refs.doctorCer.qualificationsFile = qualifications;
             this.$refs.doctorCer.certificateOfPracticeFile = certificateOfPractice;
             this.$refs.doctorCer.otherCertificateFile = otherCertificate;
             // 个人介绍
@@ -373,35 +372,42 @@ export default {
         });
     },
     onSubmit() {
+      console.log(this.doctorCer)
+      let obj={}
+      obj.certificateOfPractice=this.doctorCerData.certificateOfPracticeFile
+      obj.caseDiagram=this.doctorCerData.caseDiagramFile
+      obj.introduction=this.doctorCerData.introductionFile
+      obj.otherCertificate=this.doctorCerData.otherCertificateFile
+      obj.qualifications=this.doctorCerData.qualificationsFile
       let params = {
         ...this.topData,
-        ...this.doctorCerData
+        ...obj
       };
       console.log(params, this.doctorCerData);
       // 处理数据
       let arr = [];
-      let files = [
-        "certificateOfPracticeFile",
-        "qualificationsFile",
-        "caseDiagramFile",
-        "otherCertificateFile",
-        "introductionFile"
-      ];
-      for (let p in params) {
-        if (files.includes(p)) {
-          params[p].forEach(val => {
-            arr.push({ [p]: val });
-          });
-        } else {
-          arr.push({ [p]: params[p] });
-        }
-      }
+      // let files = [
+      //   "certificateOfPracticeFile",
+      //   "qualificationsFile",
+      //   "caseDiagramFile",
+      //   "otherCertificateFile",
+      //   "introductionFile"
+      // ];
+      // for (let p in params) {
+      //   if (files.includes(p)) {
+      //     params[p].forEach(val => {
+      //       arr.push({ [p]: val });
+      //     });
+      //   } else {
+      //     arr.push({ [p]: params[p] });
+      //   }
+      // }
       // params.city = params.city[params.city.length - 1];
       //
-      console.log(arr);
+      console.log(params,arr);
       this.$refs.doctorCer.disabled = true;
       if (this.type === "edit") {
-        Api.updateHospital(arr)
+        Api.updateHospital(params)
           .then(res => {
             this.$refs.doctorCer.disabled = false;
             console.log(res, "res");
