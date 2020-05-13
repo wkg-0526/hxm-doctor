@@ -30,7 +30,7 @@
           </el-form-item>
           <el-form-item label="绑定支付宝">
             <el-radio-group v-model="bindStatus">
-              <el-radio border :label="bindStatus===1?1:2">{{bindStatus===0?'已绑定支付宝':'绑定支付宝'}}</el-radio>
+              <el-radio border :label="bindStatus===1?1:2">{{bindStatus===0?'绑定支付宝':'已绑定支付宝'}}</el-radio>
             </el-radio-group>
             <a v-show="bindStatus===1?false:true" :style="{marginLeft:'10px'}" @click="goAplay">点击绑定</a>
           </el-form-item>

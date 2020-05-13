@@ -26,6 +26,7 @@
       />
       <!-- 第二步 -->
       <!-- <material v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="material" /> -->
+
       <tops v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" />
       <!-- <top v-show="acitiveStep === 2" @nextStep="nextStep" @setData="setData" ref="top" /> -->
       <!-- 第三步 -->
@@ -155,7 +156,6 @@ export default {
               time,
               portrait,
 
-             
               telephone,
               mailbox,
 
@@ -223,13 +223,28 @@ export default {
             this.$refs.top.imgUrl = portrait;
 
             this.$refs.doctorCer.formData1 = obj2;
-            console.log(this.$refs.doctorCer.caseDiagramFile);
+            // console.log(this.$refs.doctorCer.caseDiagramFile);
             // 案例
-            this.$refs.doctorCer.caseDiagramFile = caseDiagram;
-            this.$refs.doctorCer.introductionFile = introduction;
-            this.$refs.doctorCer.qualificationsFile = qualifications;
-            this.$refs.doctorCer.certificateOfPracticeFile = certificateOfPractice;
-            this.$refs.doctorCer.otherCertificateFile = otherCertificate;
+            caseDiagram.forEach((item, index) => {
+              this.$refs.doctorCer.caseDiagramFile.push({ adress: item });
+            });
+            introduction.forEach((item, index) => {
+              this.$refs.doctorCer.introductionFile.push({ adress: item });
+            });
+            qualifications.forEach((item, index) => {
+              this.$refs.doctorCer.qualificationsFile.push({ adress: item });
+            });
+            certificateOfPractice.forEach((item, index) => {
+              this.$refs.doctorCer.certificateOfPracticeFile.push({ adress: item });
+            });
+            otherCertificate.forEach((item, index) => {
+              this.$refs.doctorCer.otherCertificateFile.push({ adress: item });
+            });
+            // this.$refs.doctorCer.caseDiagramFile = caseDiagram;
+            // this.$refs.doctorCer.introductionFile = introduction;
+            // this.$refs.doctorCer.qualificationsFile = qualifications;
+            // this.$refs.doctorCer.certificateOfPracticeFile = certificateOfPractice;
+            // this.$refs.doctorCer.otherCertificateFile = otherCertificate;
             // 个人介绍
             // this.$refs.doctorCer.imgUrl1 = introduction;
             // this.$refs.doctorCer.imgUrl2 = institutionalLicense;
@@ -372,39 +387,85 @@ export default {
         });
     },
     onSubmit() {
-      console.log(this.doctorCer)
-      let obj={}
-      obj.certificateOfPractice=this.doctorCerData.certificateOfPracticeFile
-      obj.caseDiagram=this.doctorCerData.caseDiagramFile
-      obj.introduction=this.doctorCerData.introductionFile
-      obj.otherCertificate=this.doctorCerData.otherCertificateFile
-      obj.qualifications=this.doctorCerData.qualificationsFile
+      console.log(this.doctorCerData);
+      let obj = {};
+      obj.certificateOfPractice = [];
+      this.doctorCerData.certificateOfPracticeFile.forEach(item => {
+        obj.certificateOfPractice.push(item.adress);
+      });
+      obj.caseDiagram = [];
+      this.doctorCerData.caseDiagramFile.forEach(item => {
+        obj.caseDiagram.push(item.adress);
+      });
+      obj.introduction = [];
+      this.doctorCerData.introductionFile.forEach(item => {
+        obj.introduction.push(item.adress);
+      });
+      obj.otherCertificate = [];
+      this.doctorCerData.otherCertificateFile.forEach(item => {
+        obj.otherCertificate.push(item.adress);
+      });
+      obj.qualifications = [];
+      this.doctorCerData.qualificationsFile.forEach(item => {
+        obj.qualifications.push(item.adress);
+      });
+
+      let obj2 = {};
+      obj2.certificateOfPracticeFile = [];
+      this.doctorCerData.certificateOfPracticeFile.forEach(item => {
+        obj2.certificateOfPracticeFile.push(item.file);
+      });
+      obj2.caseDiagramFile = [];
+      this.doctorCerData.caseDiagramFile.forEach(item => {
+        obj2.caseDiagramFile.push(item.file);
+      });
+      obj2.introductionFile = [];
+      this.doctorCerData.introductionFile.forEach(item => {
+        obj2.introductionFile.push(item.file);
+      });
+      obj2.otherCertificateFile = [];
+      this.doctorCerData.otherCertificateFile.forEach(item => {
+        obj2.otherCertificateFile.push(item.file);
+      });
+      obj2.qualificationsFile = [];
+      this.doctorCerData.qualificationsFile.forEach(item => {
+        obj2.qualificationsFile.push(item.file);
+      });
+      // obj2.certificateOfPracticeFile = this.doctorCerData.certificateOfPracticeFile.file;
+      // obj2.caseDiagramFile = this.doctorCerData.caseDiagramFile.file;
+      // obj2.introductionFile = this.doctorCerData.introductionFile.file;
+      // obj2.otherCertificateFile = this.doctorCerData.otherCertificateFile.file;
+      // obj2.qualificationsFile = this.doctorCerData.qualificationsFile.file;
       let params = {
         ...this.topData,
         ...obj
       };
-      console.log(params, this.doctorCerData);
+      let paramsObj = {
+        ...this.topData,
+        ...obj2
+      };
+      console.log(paramsObj);
       // 处理数据
       let arr = [];
-      // let files = [
-      //   "certificateOfPracticeFile",
-      //   "qualificationsFile",
-      //   "caseDiagramFile",
-      //   "otherCertificateFile",
-      //   "introductionFile"
-      // ];
-      // for (let p in params) {
-      //   if (files.includes(p)) {
-      //     params[p].forEach(val => {
-      //       arr.push({ [p]: val });
-      //     });
-      //   } else {
-      //     arr.push({ [p]: params[p] });
-      //   }
-      // }
+      let files = [
+        "certificateOfPracticeFile",
+        "qualificationsFile",
+        "caseDiagramFile",
+        "otherCertificateFile",
+        "introductionFile"
+      ];
+      for (let p in paramsObj) {
+        if (files.includes(p)) {
+          paramsObj[p].forEach(val => {
+            arr.push({ [p]: val });
+          });
+        } else {
+          arr.push({ [p]: paramsObj[p] });
+        }
+      }
       // params.city = params.city[params.city.length - 1];
-      //
-      console.log(params,arr);
+
+      console.log(params, arr);
       this.$refs.doctorCer.disabled = true;
       if (this.type === "edit") {
         Api.updateHospital(params)
@@ -436,7 +497,7 @@ export default {
             this.disabled = false;
           });
       } else {
-        Api.insertAuthenticationHospital(params)
+        Api.insertAuthenticationHospital(arr)
           .then(res => {
             this.$refs.doctorCer.disabled = false;
             console.log(res, "res");

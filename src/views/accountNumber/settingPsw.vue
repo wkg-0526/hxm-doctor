@@ -17,15 +17,19 @@
                     <el-form-item label="手机验证码：" v-show="apliyResult===500?false:true">
                       <el-input v-model="loginPsw.validate" placeholder="请输入手机验证码"></el-input>
                     </el-form-item>
-                    <el-col :span="3" :style="{marginBottom:'15px'}">
-                      <el-button type="primary" @click="countDowns">{{contents}}</el-button>
-                    </el-col>
                   </el-form>
                 </el-col>
               </el-row>
               <el-row>
-                <el-col>
-                  <el-button type="primary" size="medium " @click="loginEditPsw">修改密码</el-button>
+                <el-col :span="14">
+                  <span>
+                    <el-button class="btn" type="primary" @click="countDowns">{{contents}}</el-button>
+                  </span>
+                </el-col>
+                <el-col :span="8">
+                  <span>
+                    <el-button type="primary" @click="loginEditPsw">修改密码</el-button>
+                  </span>
                 </el-col>
               </el-row>
             </el-collapse-item>
@@ -42,24 +46,26 @@
                     <el-form-item label="手机验证码：" v-show="apliyResult===500?false:true">
                       <el-input v-model="alipayPsw.validate" placeholder="请输入手机验证码"></el-input>
                     </el-form-item>
-                    <el-col :span="3" :style="{marginBottom:'15px'}">
-                      <el-button type="primary" @click="countDown">{{content}}</el-button>
-                    </el-col>
                   </el-form>
                 </el-col>
               </el-row>
               <el-row>
-                <el-col>
+                <el-col :span="14" :style="{marginBottom:'15px'}">
+                  <span class="btn">
+                    <el-button type="primary" @click="countDown">{{content}}</el-button>
+                  </span>
+                </el-col>
+                <el-col :span="8">
                   <el-button
                     type="primary"
                     size="medium "
-                    v-show="apliyResult===1?false:true"
+                    v-if="apliyResult===1"
                     @click="aplayPsw"
                   >确定</el-button>
                   <el-button
                     type="primary"
                     size="medium "
-                    v-show="apliyResult===500?false:true"
+                    v-else-if="apliyResult===500"
                     @click="aplayEditPsw"
                   >修改支付密码</el-button>
                 </el-col>
@@ -110,7 +116,7 @@ export default {
           if (res.data.result === 0) {
             this.$message({
               showClose: true,
-              message: "未设置支付密码",
+              message: "未设置支付密码,请设置支付密码",
               type: "warning"
             });
           } else if (res.data.result === 1) {
@@ -137,7 +143,7 @@ export default {
           if (res.data.result === 1) {
             this.$message({
               showClose: true,
-              message: "设置成功",
+              message: "密码设置成功",
               type: "success"
             });
           } else if (res.data.result === 500) {
@@ -216,7 +222,7 @@ export default {
           if (res.data.result === 1) {
             this.$message({
               showClose: true,
-              message: "修改成功",
+              message: "提现密码修改成功",
               type: "success"
             });
           } else if (res.data.result === 500) {
@@ -272,6 +278,7 @@ export default {
     },
     // 登录定时器验证码
     countDowns() {
+      console.log(111);
       if (!this.canClicks) return; //改动的是这两行代码
       // this.bool.verify = true;
       this.canClicks = false;
@@ -296,10 +303,19 @@ export default {
       }).then(res => {
         if (res.status === 200 && res.data) {
           if (res.data.result === 1) {
-            this.$message({
-              showClose: true,
-              message: "修改成功",
-              type: "success"
+            // this.$message({
+            //   showClose: true,
+            //   message: "修改成功",
+            //   type: "success"
+            // });
+            this.$alert("密码修改成功,请重新登录", {
+              confirmButtonText: "确定",
+              callback: action => {
+                this.$message({
+                  type: "success",
+                  message: "修改成功"
+                });
+              }
             });
           } else if (res.data.result === 500) {
             this.$message({
@@ -313,11 +329,11 @@ export default {
     },
     // 修改登录密码
     loginEditPsw() {
-      var reg = new RegExp(/^\d{6}$/);
+      var reg = new RegExp(/[a-zA-Z_0-9]{5,20}$/);
       if (!reg.test(this.loginPsw.psw) && !reg.test(this.loginPsw.conPsw)) {
         this.$message({
           showClose: true,
-          message: "请输入六位数字",
+          message: "请输入5-20位数字",
           type: "error"
         });
         this.loginPsw.psw = "";
@@ -340,13 +356,17 @@ export default {
 .main {
   background: rgba(245, 246, 250, 1);
   .login-psw {
-    height: 230px;
+    height: 500px;
     background: rgba(255, 255, 255, 1);
     padding: 40px 0 0 60px;
+
     h2 {
     }
+    .btn {
+      margin-left: 100px;
+      margin-right: 20px;
+    }
     .el-button--primary {
-      margin-left: 150px;
       color: #fff;
       background-color: rgba(53, 179, 188, 1);
       border-color: rgba(53, 179, 188, 1);

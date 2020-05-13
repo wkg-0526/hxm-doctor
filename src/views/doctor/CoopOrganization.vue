@@ -56,7 +56,7 @@
                     </el-col>
                     <el-col>
                       <h3>合作状态：</h3>
-                      <span v-if="item.type===0">审核中</span>
+                      <span v-if="item.type==0">审核中</span>
                       <span v-else>合作中</span>
                     </el-col>
                   </el-row>
@@ -66,21 +66,32 @@
           </el-row>
           <el-row>
             <el-col>
-              <el-button
-                v-show="item.type===1?true:false"
-                type="primary"
-                @click="doctorAgree(item.hospitalId)"
-              >接受合作</el-button>
-              <el-button v-show="item.type===1?true:false" @click="doctorRefu(item.hospitalId)">拒绝合作</el-button>
-              <el-button
-                v-show="item.type===1?false:true"
-                class="plainBtn"
-                @click="delHospital(item.hospitalId)"
-              >解除合作</el-button>
+              <div v-if="item.type==0">
+                <el-button type="primary" @click="doctorAgree(item.hospitalId)">接受合作</el-button>
+                <el-button @click="doctorRefu(item.hospitalId)">拒绝合作</el-button>
+              </div>
+              <div v-else>
+                <el-button class="plainBtn" @click="delHospital(item.hospitalId)">解除合作</el-button>
+              </div>
             </el-col>
           </el-row>
         </li>
       </ul>
+      <el-row>
+        <el-col>
+          <div class="blockPage">
+            <el-pagination
+              @size-change="handleSizeChange"
+              @current-change="handleCurrentChange"
+              :page-sizes="[1, 2, 3, 4]"
+              :page-size="10"
+              layout="prev, pager, next, jumper"
+              :total="count?count:1"
+              background
+            ></el-pagination>
+          </div>
+        </el-col>
+      </el-row>
     </div>
   </div>
 </template>
@@ -119,8 +130,10 @@ export default {
     // 查询医生合作机构
     DoctorFindAllBindHospital(params) {
       Api.DoctorFindAllBindHospital({ ...params }).then(res => {
+        console.log(res.data);
         if (res.status === 200 && res.data.list) {
           this.doctorList = res.data.list;
+          this.count = res.data.count;
         }
       });
     },
@@ -131,6 +144,7 @@ export default {
     // 医生解除合作
     deleteDoctorHospitalIds(hospitalId) {
       Api.deleteDoctorHospitalIds({ hospitalId }).then(res => {
+        console.log(res);
         if (res.status === 200 && res.data) {
           if (res.data.result === 1) {
             this.$message({
@@ -156,7 +170,7 @@ export default {
     },
     // 医生同意
     doctorAgree(hospitalId) {
-      this.insertDoctorAgreeHospitals(hospitalId);
+      this.insertDoctorAgreeHospitals({ hospitalId });
     },
     insertDoctorAgreeHospitals(hospitalId) {
       Api.insertDoctorAgreeHospitals(hospitalId).then(res => {
@@ -166,7 +180,7 @@ export default {
               type: "success",
               message: "加入成功!"
             });
-            this.DoctorFindAllBindHospital(1);
+            this.DoctorFindAllBindHospital({ page: 1 });
           } else if (res.data.result === 0) {
             this.$message({
               type: "info",
@@ -188,21 +202,21 @@ export default {
       this.insertDoctorRefuseHospitals(hospitalId);
     },
     insertDoctorRefuseHospitals(hospitalId) {
-      Api.insertDoctorRefuseHospitals(hospitalId).then(res => {
+      Api.insertDoctorRefuseHospitals({ hospitalId }).then(res => {
         if (res.status === 200 && res.data) {
           if (res.data.result === 1) {
             this.$message({
               type: "success",
               message: "已拒绝!"
             });
-            this.DoctorFindAllBindHospital(1);
+            this.DoctorFindAllBindHospital({ page: 1 });
           } else if (res.data.result === 0) {
             this.$message({
               type: "info",
               message: "拒绝失败!"
             });
 
-            this.DoctorFindAllBindHospital(1);
+            this.DoctorFindAllBindHospital({ page: 1 });
           } else {
             this.$message({
               type: "error",
@@ -216,21 +230,34 @@ export default {
     doctorOrder(e) {
       this.DoctorFindAllBindHospital({ page: 1, order: e });
     },
+    handleSizeChange(val) {
+      console.log(`每页 ${val} 条`);
+      this.DoctorFindAllBindHospital({ page: val });
+    },
+    handleCurrentChange(val) {
+      console.log(`当前页: ${val}`);
+      this.DoctorFindAllBindHospital({ page: val });
+    },
     // 搜索
     search() {
       let timeArr = [];
-      this.formLabelAlign.cooppTimes.forEach(item => {
-        timeArr.push(format(item, "YYYY-MM-DD"));
-      });
-      let timeObj = {};
-      timeObj.startTime = timeArr[0];
-      timeObj.endTime = timeArr[1];
-      let params = {
-        page: 1,
-        startTime: timeObj.startTime,
-        endTime: timeObj.endTime
-      };
-      this.DoctorFindAllBindHospital(params);
+
+      if (this.formLabelAlign.cooppTimes) {
+        this.formLabelAlign.cooppTimes.forEach(item => {
+          timeArr.push(format(item, "YYYY-MM-DD"));
+        });
+        let timeObj = {};
+        timeObj.startTime = timeArr[0];
+        timeObj.endTime = timeArr[1];
+        let params = {
+          page: 1,
+          startTime: timeObj.startTime,
+          endTime: timeObj.endTime
+        };
+        this.DoctorFindAllBindHospital(params);
+      } else {
+        this.DoctorFindAllBindHospital({ page: 1 });
+      }
     }
   }
 };
@@ -242,7 +269,7 @@ export default {
   height: 100%;
 
   padding: 30px 16%;
-  background: rgba(245, 246, 250, 1);
+  // background: rgba(245, 246, 250, 1);
   h1 {
     font-size: 14px;
     font-family: PingFangSC-Medium, PingFang SC;
@@ -292,6 +319,7 @@ export default {
     }
   }
   ul {
+    overflow: hidden;
     li {
       width: 320px;
       padding: 30px 49px;
@@ -361,6 +389,12 @@ export default {
         line-height: 14px;
         margin-left: 56px;
       }
+    }
+  }
+  .blockPage {
+    text-align: center;
+    margin-top: 30px;
+    .el-pagination {
     }
   }
 }

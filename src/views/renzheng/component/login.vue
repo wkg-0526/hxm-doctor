@@ -47,7 +47,7 @@
             :disabled="loginDisabled"
           >下一步</el-button>
         </div>
-        <div @click="go">认证结果</div>
+        <!-- <div @click="go">认证结果</div> -->
       </el-form>
     </div>
   </div>
@@ -196,6 +196,7 @@ export default {
             validate: formData.regValidate,
             userPhone: formData.userPhone
           }).then(res => {
+            console.log(res);
             this.loginDisabled = false;
             if (res.data.result === 1) {
               this.$message({
@@ -204,6 +205,13 @@ export default {
               });
               this.$emit("nextStep", 2);
               this.loginDisabled = true;
+              Api.findHospitalDetail().then(res => {
+                if (res.data.status == 0) {
+                  this.$router.push({ path: "/result" });
+                } else if (res.data.status == 2) {
+                  this.$router.push({ path: "/result" });
+                }
+              });
             } else if (res.data.result === 2) {
               // this.$message({
               // 	message: '密码未设置',

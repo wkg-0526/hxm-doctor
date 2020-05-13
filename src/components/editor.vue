@@ -67,28 +67,28 @@ export default {
         // }
 
         console.log(files, "111");
-        files.forEach(file => {
-          const isSize = new Promise(function(resolve, reject) {
-            let width = 400;
-            let height = 400;
-            let _URL = window.URL || window.webkitURL;
-            let img = new Image();
-            img.onload = function() {
-              let valid = img.width == width && img.height == height;
-              valid ? resolve() : reject();
-            };
-            img.src = _URL.createObjectURL(file);
-          }).then(
-            () => {
-              return file;
-            },
-            () => {
-              this.$message.error("请上传400x400像素的图片!");
-              return Promise.reject();
-            }
-          );
-          return isSize;
-        });
+        // files.forEach(file => {
+        //   const isSize = new Promise(function(resolve, reject) {
+        //     let width = 400;
+        //     let height = 400;
+        //     let _URL = window.URL || window.webkitURL;
+        //     let img = new Image();
+        //     img.onload = function() {
+        //       let valid = img.width == width && img.height == height;
+        //       valid ? resolve() : reject();
+        //     };
+        //     img.src = _URL.createObjectURL(file);
+        //   }).then(
+        //     () => {
+        //       return file;
+        //     },
+        //     () => {
+        //       this.$message.error("请上传400x400像素的图片!");
+        //       return Promise.reject();
+        //     }
+        //   );
+        //   return isSize;
+        // });
       },
       success: function(xhr, editor, result) {
         // 图片上传并返回结果，图片插入成功之后触发

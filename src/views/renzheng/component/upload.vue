@@ -75,6 +75,7 @@ export default {
               var datainfo = this.result;
               imgList.push(datainfo);
               this.imgList = imgList;
+              console.log(this.imgList);
               // self[imgUrl] = datainfo;
             };
           })(e.target.files[0]);

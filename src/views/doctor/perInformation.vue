@@ -2,26 +2,155 @@
   <div class="main">
     <h2>医生个人信息</h2>
     <div class="content">
-      <el-row>
-        <el-col :span="8">
-          <div class="result" v-show="information.status===0?true:false">
-            <p>审核状态：审核中</p>
-          </div>
-        </el-col>
-        <el-col :span="8">
-          <div class="result" v-show="information.status===2?true:false">
+      <el-form label-position="center" label-width="120px" :model="information" :disabled="true">
+        <el-row>
+          <el-col :span="8">
+            <div class="result" v-show="information.status===0?true:false">
+              <p>审核状态：审核中</p>
+            </div>
+          </el-col>
+          <el-col :span="8">
+            <div class="result" v-show="information.status===2?true:false">
+              <el-row>
+                <el-col>
+                  <span>审核状态：</span>
+                  <span>审核失败</span>
+                </el-col>
+              </el-row>
+
+              <div class="reason">失败原因：{{information.reason}}</div>
+            </div>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col :span="12">
             <el-row>
-              <el-col>
-                <span>审核状态：</span>
-                <span>审核失败</span>
+              <el-col :span="10">
+                <el-form-item label="名字">
+                  <el-input v-model="information.fullName"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="性别">
+                  <el-input v-model="information.gender"></el-input>
+                </el-form-item>
               </el-col>
             </el-row>
+            <el-row>
+              <el-col :span="10">
+                <el-form-item label="国家">
+                  <el-input v-model="information.country"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="邮箱">
+                  <el-input v-model="information.mailbox"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="10">
+                <el-form-item label="从业时间">
+                  <el-input v-model="information.time"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="昵称">
+                  <el-input v-model="information.occupationTitle"></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="10">
+                <el-form-item label="手机号">
+                  <el-input v-model="information.telephone"></el-input>
+                </el-form-item>
+              </el-col>
+              <el-col :span="10">
+                <el-form-item label="擅长">
+                  <el-input
+                    v-for="(item,index) in information.beGoodAte"
+                    :key="index"
+                    :value="item"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="医师执业证">
+                  <img
+                    :style="{width:'100px',height:'100px'}"
+                    v-for="(item,index) in information.certificateOfPractice"
+                    :key="index"
+                    :src="item"
+                    alt
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="医师资格证">
+                  <img
+                    :style="{width:'100px',height:'100px'}"
+                    v-for="(item,index) in information.qualifications"
+                    :key="index"
+                    :src="item"
+                    alt
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="案例图">
+                  <img
+                    :style="{width:'100px',height:'100px'}"
+                    v-for="(item,index) in information.caseDiagram"
+                    :key="index"
+                    :src="item"
+                    alt
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="其他证书">
+                  <img
+                    :style="{width:'100px',height:'100px'}"
+                    v-for="(item,index) in information.otherCertificate"
+                    :key="index"
+                    :src="item"
+                    alt
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+            <el-row>
+              <el-col>
+                <el-form-item label="个人介绍">
+                  <img
+                    :style="{width:'100px',height:'100px'}"
+                    v-for="(item,index) in information.introduction"
+                    :key="index"
+                    :src="item"
+                    alt
+                  />
+                </el-form-item>
+              </el-col>
+            </el-row>
+          </el-col>
+          <el-col :span="4">
+            <div class="images">
+              <img :style="{width:'100px',height:'100px'}" :src="information.portrait" alt />
+            </div>
+          </el-col>
+        </el-row>
+      </el-form>
 
-            <div class="reason">失败原因：{{information.reason}}</div>
-          </div>
-        </el-col>
-      </el-row>
-      <el-row>
+      <!-- <el-row>
         <el-col :span="12">
           <el-row>
             <el-col :span="8">
@@ -127,7 +256,7 @@
             <img :style="{width:'100px',height:'100px'}" :src="information.portrait" alt />
           </div>
         </el-col>
-      </el-row>
+      </el-row>-->
     </div>
 
     <el-row>
@@ -185,7 +314,7 @@ export default {
   padding-left: 90px;
   padding-right: 90px;
   padding-top: 83px;
-  background: rgba(245, 247, 250, 1);
+  background: #fff;
   border-radius: 13px;
   h2 {
     font-size: 13px;
@@ -302,6 +431,9 @@ export default {
       background-color: rgba(53, 179, 188, 1);
       border-color: rgba(53, 179, 188, 1);
     }
+  }
+  /deep/ .el-input__inner {
+    color: #606266;
   }
 }
 </style>

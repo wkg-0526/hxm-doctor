@@ -84,12 +84,20 @@
             <el-row>
               <el-col :span="11">
                 <el-form-item label="手机号">
-                  <el-input v-model="formLabelAlign.telephone" placeholder="请输入手机号"></el-input>
+                  <el-input
+                    v-model="formLabelAlign.telephone"
+                    placeholder="请输入手机号"
+                    oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+                  ></el-input>
                 </el-form-item>
               </el-col>
               <el-col :span="11">
                 <el-form-item label="邮箱">
-                  <el-input v-model="formLabelAlign.mailbox" placeholder="请输入邮箱"></el-input>
+                  <el-input
+                    v-model="formLabelAlign.mailbox"
+                    placeholder="请输入邮箱"
+                    oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+                  ></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -425,31 +433,45 @@ export default {
     },
     // 修改
     sendInfo() {
+      console.log(22);
       let time = format(this.formLabelAlign.time, "YYYY-MM-DD");
-      if (this.portraitFile.portrait === "") {
-        this.$message({
-          showClose: true,
-          message: "请重新上传头像",
-          type: "warning"
-        });
-        return;
+
+      let params = {};
+      if (this.portraitFile.portrait) {
+        params = {
+          fullName: this.formLabelAlign.fullName,
+          gender: this.formLabelAlign.gender,
+          country: this.formLabelAlign.country,
+          occupationTitle: this.formLabelAlign.occupationTitle,
+          telephone: this.formLabelAlign.telephone,
+          mailbox: this.formLabelAlign.mailbox,
+          beGoodAte: this.formLabelAlign.beGoodAte,
+          time,
+          portraitFile: this.portraitFile.portrait,
+          certificateOfPractice: this.formLabelAlign.certificateOfPractice,
+          caseDiagram: this.formLabelAlign.caseDiagram,
+          otherCertificate: this.formLabelAlign.otherCertificate,
+          introduction: this.formLabelAlign.introduction,
+          qualifications: this.formLabelAlign.qualifications
+        };
+      } else {
+        params = {
+          fullName: this.formLabelAlign.fullName,
+          gender: this.formLabelAlign.gender,
+          country: this.formLabelAlign.country,
+          occupationTitle: this.formLabelAlign.occupationTitle,
+          telephone: this.formLabelAlign.telephone,
+          mailbox: this.formLabelAlign.mailbox,
+          beGoodAte: this.formLabelAlign.beGoodAte,
+          time,
+          certificateOfPractice: this.formLabelAlign.certificateOfPractice,
+          caseDiagram: this.formLabelAlign.caseDiagram,
+          otherCertificate: this.formLabelAlign.otherCertificate,
+          introduction: this.formLabelAlign.introduction,
+          qualifications: this.formLabelAlign.qualifications
+        };
       }
-      let params = {
-        fullName: this.formLabelAlign.fullName,
-        gender: this.formLabelAlign.gender,
-        country: this.formLabelAlign.country,
-        occupationTitle: this.formLabelAlign.occupationTitle,
-        telephone: this.formLabelAlign.telephone,
-        mailbox: this.formLabelAlign.mailbox,
-        beGoodAte: this.formLabelAlign.beGoodAte,
-        time,
-        portraitFile: this.portraitFile.portrait,
-        certificateOfPractice: this.formLabelAlign.certificateOfPractice,
-        caseDiagram: this.formLabelAlign.caseDiagram,
-        otherCertificate: this.formLabelAlign.otherCertificate,
-        introduction: this.formLabelAlign.introduction,
-        qualifications: this.formLabelAlign.qualifications
-      };
+
       Api.updateDoctor({ ...params }).then(res => {
         if (res.status === 200 && res.data) {
           this.$router.push({ path: "/doctor/perInformation" });
@@ -466,13 +488,13 @@ export default {
 <style lang="less" scoped>
 .main {
   padding: 83px 0 0 0px;
-  background: rgba(245, 246, 250, 1);
+
   .content {
     width: 900px;
     margin: 0 auto;
     overflow: hidden;
     background: rgba(255, 255, 255, 1);
-    border: 1px solid rgba(225, 225, 225, 1);
+    // border: 1px solid rgba(225, 225, 225, 1);
     padding-left: 100px;
 
     .sendInfo {

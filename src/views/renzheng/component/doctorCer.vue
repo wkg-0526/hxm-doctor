@@ -47,21 +47,13 @@
                 :key="index"
                 class="img-item-wrapper"
               >
-                <img
-                  :style="{ float: 'left' }"
-                  class="img-item"
-                  width="100px"
-                  height="100px"
-                  :src="item"
-                  alt
-                />
+                <img :style="{ float: 'left' }" class="img-item" :src="item.adress" alt />
                 <i
                   class="el-icon-error img-close-icon pointer"
                   @click="delCertificateOfPractice(index)"
                 ></i>
               </div>
               <el-upload
-              v-show="certificateOfPracticeFile.length>2?false:true"
                 action="/operate/upload.json"
                 list-type="picture-card"
                 :on-remove="handleRemove"
@@ -85,18 +77,10 @@
                 :key="index"
                 class="img-item-wrapper"
               >
-                <img
-                  :style="{ float: 'left' }"
-                  class="img-item"
-                  width="100px"
-                  height="100px"
-                  :src="item"
-                  alt
-                />
+                <img :style="{ float: 'left' }" class="img-item" :src="item.adress" alt />
                 <i class="el-icon-error img-close-icon pointer" @click="delQualifications(index)"></i>
               </div>
               <el-upload
-               v-show="qualificationsFile.length>2?false:true"
                 action="/operate/upload.json"
                 list-type="picture-card"
                 :on-remove="handleRemove"
@@ -120,18 +104,10 @@
                 :key="index"
                 class="img-item-wrapper"
               >
-                <img
-                  :style="{ float: 'left' }"
-                  class="img-item"
-                  width="100px"
-                  height="100px"
-                  :src="item"
-                  alt
-                />
+                <img :style="{ float: 'left' }" class="img-item" :src="item.adress" alt />
                 <i class="el-icon-error img-close-icon pointer" @click="delCaseDiagram(index)"></i>
               </div>
               <el-upload
-              v-show="caseDiagramFile.length>2?false:true"
                 action="/operate/upload.json"
                 list-type="picture-card"
                 :on-remove="handleRemove"
@@ -156,18 +132,10 @@
                 :key="index"
                 class="img-item-wrapper"
               >
-                <img
-                  :style="{ float: 'left' }"
-                  class="img-item"
-                  width="100px"
-                  height="100px"
-                  :src="item"
-                  alt
-                />
+                <img :style="{ float: 'left' }" class="img-item" :src="item.adress" alt />
                 <i class="el-icon-error img-close-icon pointer" @click="delOtherCertificate(index)"></i>
               </div>
               <el-upload
-              v-show="otherCertificateFile.length>2?false:true"
                 action="/operate/upload.json"
                 list-type="picture-card"
                 :on-remove="handleRemove"
@@ -192,18 +160,10 @@
                 :key="index"
                 class="img-item-wrapper"
               >
-                <img
-                  :style="{ float: 'left' }"
-                  class="img-item"
-                  width="100px"
-                  height="100px"
-                  :src="item"
-                  alt
-                />
+                <img :style="{ float: 'left' }" class="img-item" :src="item.adress" alt />
                 <i class="el-icon-error img-close-icon pointer" @click="delIntroduction(index)"></i>
               </div>
               <el-upload
-               v-show="introductionFile.length < 9"
                 action="/operate/upload.json"
                 list-type="picture-card"
                 :on-remove="handleRemove"
@@ -272,6 +232,7 @@
       display: inline-block;
       margin-right: 20px;
       vertical-align: top;
+      margin-bottom: 10px;
       img {
         vertical-align: top;
         display: inline-block;
@@ -351,7 +312,9 @@ export default {
   components: {
     uploadLink
   },
-  created: function() {},
+  created() {
+    console.log(this.caseDiagramFile);
+  },
   mounted: function() {
     //console.log(this.$router.path);
   },
@@ -407,6 +370,7 @@ export default {
       disabled: false
     };
   },
+
   methods: {
     onChange(e) {
       // console.log(e,'e');
@@ -500,7 +464,7 @@ export default {
     },
     handleCertificateOfPractice(res, file) {
       console.log(res);
-      this.certificateOfPracticeFile.push(res.url[0]);
+      this.certificateOfPracticeFile.push({ adress: res.url[0], file: file.raw });
     },
     delCertificateOfPractice(index) {
       this.certificateOfPracticeFile.splice(index, 1);
@@ -508,29 +472,29 @@ export default {
     // 案例图上传
     handleCaseDiagram(res, file) {
       // console.log(res)
-      this.caseDiagramFile.push(res.url[0]);
+      this.caseDiagramFile.push({ adress: res.url[0], file: file.raw });
     },
     delCaseDiagram(index) {
       this.caseDiagramFile.splice(index, 1);
     },
     // 资格证书上传
     handleQualifications(res, file) {
-      console.log(res, this.qualificationsFile);
-      this.qualificationsFile.push(res.url[0]);
+      console.log(file, this.qualificationsFile);
+      this.qualificationsFile.push({ adress: res.url[0], file: file.raw });
     },
     delQualifications(index) {
       this.qualificationsFile.splice(index, 1);
     },
     // 其他证书上传
     handleOtherCertificate(res, file) {
-      this.otherCertificateFile.push(res.url[0]);
+      this.otherCertificateFile.push({ adress: res.url[0], file: file.raw });
     },
     delOtherCertificate(index) {
       this.otherCertificateFile.splice(index, 1);
     },
     // 个人介绍
     handleIntroduction(res, file) {
-      this.introductionFile.push(res.url[0]);
+      this.introductionFile.push({ adress: res.url[0], file: file.raw });
     },
     delIntroduction(index) {
       this.introductionFile.splice(index, 1);

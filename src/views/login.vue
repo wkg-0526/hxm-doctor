@@ -18,7 +18,6 @@
               <el-input
                 :class="['login-input',loginForm.userAccount.length > 0 && 'login-input-white']"
                 placeholder="请输入账号"
-                :maxlength="m20"
                 v-model="loginForm.userAccount"
                 clearable
               ></el-input>
@@ -29,7 +28,6 @@
                 @keyup.enter="submitForm"
                 placeholder="请输入密码"
                 type="password"
-                :maxlength="m14"
                 v-model="loginForm.userPassword"
                 clearable
               />
@@ -70,7 +68,7 @@ export default {
       if (!val) {
         callback("请输入用户名");
       } else if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]{2,20}$/.test(val)) {
-        // callback('用户名仅支持2-20位中英文、数字和下划线  ');
+        callback("用户名仅支持2-20位中英文、数字和下划线  ");
         callback();
       } else {
         callback();
@@ -81,9 +79,9 @@ export default {
       let val = value;
       if (!val) {
         callback("请输入密码");
-      } else if (!/^[a-zA-Z0-9_!@#$%^&*()_+]{6,14}$/.test(val)) {
+      } else if (!/^[a-zA-Z0-9_!@#$%^&*()_+]{6,30}$/.test(val)) {
         callback();
-        // callback('密码仅支持6-14位大小写字母，数字和标点符号');
+        // callback('密码仅支持6-30位大小写字母，数字和标点符号');
       } else {
         callback();
       }

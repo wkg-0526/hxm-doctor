@@ -254,7 +254,7 @@
     <div class="good-focusImg pb30">
       <div class="pb30">
         <span style="padding-right: 30px" class="good-title">焦点图</span>
-        <span class="good-title-desc">请上传400x400像素的图片，第一张为封面，最多五张</span>
+        <span class="good-title-desc">请上传750x750像素的图片，第一张为封面，最多五张</span>
       </div>
 
       <section
@@ -269,7 +269,7 @@
         </template>
 
         <el-upload
-          action="/operate/shopupload.json"
+          action="/operate/upload.json"
           :on-remove="handleRemove"
           :before-upload="beforeUpload"
           :on-success="handleUploadSuccess"
@@ -285,7 +285,7 @@
     <div class="good-detail pb30">
       <div class="pb30">
         <span style="padding-right: 30px" class="good-title">详情页</span>
-        <span class="good-title-desc">请上传宽度为400像素的图片</span>
+        <span class="good-title-desc">请上传宽度为706像素的图片</span>
       </div>
 
       <editor :catchData="catchData" :content="detail"></editor>

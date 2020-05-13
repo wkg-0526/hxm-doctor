@@ -233,15 +233,32 @@ export default new Router({
     },
     {
       path: "/notice",
-      name: "消息",
-      isPull: false,
-      hidden: true,
+      name: "系统消息",
+      isPull: true,
+      // hidden: true,
+      icon: "iconmessage",
       component: Wrapper,
       children: [
         {
-          path: "msgNotice",
-          hidden: true,
-          component: () => import("./views/notice/notice.vue")
+          path: "sysNotice",
+          name: "系统消息",
+          hidden: false,
+          component: () => import("./views/notice/sysNotice.vue")
+        },
+        {
+          path: "authNotice",
+          name: "认证消息",
+          component: () => import("./views/notice/authNotice.vue")
+        },
+        {
+          path: "interNotice",
+          name: "互动消息",
+          component: () => import("./views/notice/interNotice.vue")
+        },
+        {
+          path: "activeNotice",
+          name: "活动消息",
+          component: () => import("./views/notice/activeNotice.vue")
         }
       ]
     },
