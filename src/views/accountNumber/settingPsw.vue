@@ -56,15 +56,9 @@
                   </span>
                 </el-col>
                 <el-col :span="8">
+                  <el-button type="primary" v-if="apliyResult===1" @click="aplayPsw">确定</el-button>
                   <el-button
                     type="primary"
-                    size="medium "
-                    v-if="apliyResult===1"
-                    @click="aplayPsw"
-                  >确定</el-button>
-                  <el-button
-                    type="primary"
-                    size="medium "
                     v-else-if="apliyResult===500"
                     @click="aplayEditPsw"
                   >修改支付密码</el-button>
@@ -310,11 +304,9 @@ export default {
             // });
             this.$alert("密码修改成功,请重新登录", {
               confirmButtonText: "确定",
+              center: true,
               callback: action => {
-                this.$message({
-                  type: "success",
-                  message: "修改成功"
-                });
+                this.$router.push({ path: "/login" });
               }
             });
           } else if (res.data.result === 500) {

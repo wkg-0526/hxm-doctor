@@ -145,9 +145,7 @@ export default {
           console.log(res.data, 123);
           if (res && res.status === 200) {
             // console.log(res.data);
-
             this.detailData = res.data;
-
             const {
               fullName,
               gender,
@@ -155,10 +153,8 @@ export default {
               occupationTitle,
               time,
               portrait,
-
               telephone,
               mailbox,
-
               // 执业证
               certificateOfPractice,
               // 个人介绍
@@ -166,26 +162,12 @@ export default {
               // 案例
               caseDiagram,
               // 营业执照
-
               qualifications,
               // 机构许可证
               otherCertificate,
               beGoodAte
             } = res.data;
             let _time = format(time, "YYYY-MM-DD");
-
-            // 城市回填
-            // let _arr = [];
-            // for (let obj of cityData) {
-            //   for (let o of obj.children) {
-            //     if (o.value === city) {
-            //       // console.log(obj.value,city)
-            //       _arr.push(obj.value);
-            //       _arr.push(city);
-            //       break;
-            //     }
-            //   }
-            // }
 
             let obj1 = {
               fullName,
@@ -208,20 +190,8 @@ export default {
               certificateOfPractice,
               otherCertificate
             };
-
-            // let obj3 = {
-            //   legalPerson,
-            //   legalPersonIdNumber,
-            //   legalPersonPhone,
-            //   fullName,
-            //   telePhone,
-            //   mailbox,
-            //   position
-            // };
-
             this.$refs.top.formData = obj1;
             this.$refs.top.imgUrl = portrait;
-
             this.$refs.doctorCer.formData1 = obj2;
             // console.log(this.$refs.doctorCer.caseDiagramFile);
             // 案例
@@ -240,120 +210,11 @@ export default {
             otherCertificate.forEach((item, index) => {
               this.$refs.doctorCer.otherCertificateFile.push({ adress: item });
             });
-            // this.$refs.doctorCer.caseDiagramFile = caseDiagram;
-            // this.$refs.doctorCer.introductionFile = introduction;
-            // this.$refs.doctorCer.qualificationsFile = qualifications;
-            // this.$refs.doctorCer.certificateOfPracticeFile = certificateOfPractice;
-            // this.$refs.doctorCer.otherCertificateFile = otherCertificate;
-            // 个人介绍
-            // this.$refs.doctorCer.imgUrl1 = introduction;
-            // this.$refs.doctorCer.imgUrl2 = institutionalLicense;
-            // this.$refs.top.formData = obj1;
-            // this.$refs.top.imgUrl = hospitalLog;
-
-            // this.$refs.doctorCer.formData1 = obj2;
-            // this.$refs.qualification.formData2 = obj3;
-            // this.$refs.doctorCer.formData1 = obj2;
-            // 暂定
-            // this.$refs.qualification.imgUrl1 = businessLicense;
-            // this.$refs.qualification.imgUrl2 = institutionalLicense;
           }
         })
         .catch(error => {});
     },
-    // getInitData() {
-    //   const { userId } = this;
-    //   Api.operatefindDoctorDeatail({
-    //     userId
-    //   })
-    //     .then(res => {
-    //       if (res && res.status === 200) {
-    //         // console.log(res.data);
 
-    //         this.detailData = res.data;
-    //         const {
-    //           fullName,
-    //           gender,
-    //           country,
-    //           occupationTitle,
-    //           time,
-    //           portrait,
-
-    //           businessLicenseName,
-    //           creditCode,
-    //           legalPerson,
-    //           legalPersonIdNumber,
-    //           legalPersonPhone,
-    //           telephone,
-    //           mailbox,
-    //           position,
-    //           // 个人介绍
-    //           introduction,
-    //           // 案例
-    //           caseDiagram,
-    //           // 营业执照
-    //           businessLicense,
-    //           // 机构许可证
-    //           institutionalLicense,
-    //           beGoodAte
-    //         } = res.data;
-
-    //         let _time = format(time, "YYYY-MM-DD");
-
-    //         // /operate/upload.json
-
-    //         // 城市回填
-    //         // let _arr = []
-    //         // for(let obj of cityData){
-    //         //     for(let o of obj.children){
-    //         //         if(o.value === city){
-    //         //             // console.log(obj.value,city)
-    //         //             _arr.push(obj.value);
-    //         //             _arr.push(city);
-    //         //             break
-    //         //         }
-    //         //     }
-    //         // }
-
-    //         let obj1 = {
-    //           fullName,
-    //           gender,
-    //           country,
-    //           occupationTitle,
-    //           time,
-    //           portrait,
-    //           time: _time
-    //           // imgUrl:hospitalLog
-    //         };
-    //         let obj2 = {
-    //           businessLicenseName,
-    //           creditCode
-    //         };
-
-    //         let obj3 = {
-    //           // legalPerson,
-    //           // legalPersonIdNumber,
-    //           // legalPersonPhone,
-    //           telephone,
-    //           mailbox,
-    //           beGoodAte
-    //           // position
-    //         };
-
-    //         this.$refs.top.formData = obj1;
-    //         this.$refs.top.imgUrl = portrait;
-
-    //         this.$refs.bottom.formData1 = obj2;
-    //         this.$refs.bottom.formData2 = obj3;
-    //         // 案例
-    //         this.$refs.bottom.caseDiagramFile = caseDiagram;
-    //         // 个人介绍
-    //         this.$refs.bottom.imgUrl1 = introduction;
-    //         this.$refs.bottom.imgUrl2 = institutionalLicense;
-    //       }
-    //     })
-    //     .catch(error => {});
-    // },
     login() {
       let param = {};
       Api.hospitalLogin(params)

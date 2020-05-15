@@ -114,7 +114,7 @@ export default {
       let val = value && value.trim();
       if (!val) {
         callback("请输入手机号");
-      } else if (!/^1[345678]\d{9}$/.test(val)) {
+      } else if (!/^1[3456789]\d{9}$/.test(val)) {
         callback("手机号格式错误");
       } else {
         callback();

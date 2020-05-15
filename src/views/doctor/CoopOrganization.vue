@@ -1,11 +1,11 @@
 <template>
   <div class="content">
-    <h1>合作机构</h1>
+    <h1>医生管理 &gt;&gt; 合作医院</h1>
     <div class="containter">
       <div class="coopOra-header">
         <el-form :label-position="labelPosition" label-width="80px" :model="formLabelAlign">
           <el-row>
-            <el-col :span="12">
+            <el-col :span="9">
               <el-form-item label="合作时间">
                 <div class="block">
                   <el-date-picker
@@ -267,9 +267,8 @@ export default {
 .content {
   width: 100%;
   height: 100%;
-
-  padding: 30px 16%;
-  // background: rgba(245, 246, 250, 1);
+  padding: 30px;
+  background: rgba(245, 246, 250, 1);
   h1 {
     font-size: 14px;
     font-family: PingFangSC-Medium, PingFang SC;
@@ -279,7 +278,7 @@ export default {
     margin-bottom: 25px;
   }
   .containter {
-    min-height: 200px;
+    min-height: 640px;
     margin: 0 auto;
     background: rgba(255, 255, 255, 1);
     border-radius: 13px;
@@ -291,7 +290,7 @@ export default {
       background: rgba(243, 247, 247, 1);
       border-radius: 2px;
       border: 1px solid rgba(225, 225, 225, 1);
-      margin: 20px;
+
       /deep/ .el-form-item {
         margin: 25px 0;
         /deep/ .el-select {
@@ -320,13 +319,15 @@ export default {
   }
   ul {
     overflow: hidden;
+    min-height: 510px;
     li {
       width: 320px;
       padding: 30px 49px;
       background: rgba(255, 255, 255, 1);
       box-shadow: 0px 2px 10px 0px rgba(0, 0, 0, 0.1);
       border-radius: 8px;
-      margin: 20px;
+      margin-left: 30px;
+      margin-right: 10px;
       float: left;
       /deep/ .el-avatar {
         width: 61px;

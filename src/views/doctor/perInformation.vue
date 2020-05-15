@@ -1,6 +1,6 @@
 <template>
   <div class="main">
-    <h2>医生个人信息</h2>
+    <h2>医生管理 &gt;&gt; 个人信息</h2>
     <div class="content">
       <el-form label-position="center" label-width="120px" :model="information" :disabled="true">
         <el-row>
@@ -23,7 +23,7 @@
           </el-col>
         </el-row>
         <el-row>
-          <el-col :span="12">
+          <el-col :span="16">
             <el-row>
               <el-col :span="10">
                 <el-form-item label="名字">
@@ -43,8 +43,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="10">
-                <el-form-item label="邮箱">
-                  <el-input v-model="information.mailbox"></el-input>
+                <el-form-item label="职称">
+                  <el-input v-model="information.occupationTitle"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -55,8 +55,8 @@
                 </el-form-item>
               </el-col>
               <el-col :span="10">
-                <el-form-item label="昵称">
-                  <el-input v-model="information.occupationTitle"></el-input>
+                <el-form-item label="邮箱">
+                  <el-input v-model="information.mailbox"></el-input>
                 </el-form-item>
               </el-col>
             </el-row>
@@ -76,123 +76,16 @@
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="医师执业证">
-                  <img
-                    :style="{width:'100px',height:'100px'}"
-                    v-for="(item,index) in information.certificateOfPractice"
-                    :key="index"
-                    :src="item"
-                    alt
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="医师资格证">
-                  <img
-                    :style="{width:'100px',height:'100px'}"
-                    v-for="(item,index) in information.qualifications"
-                    :key="index"
-                    :src="item"
-                    alt
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="案例图">
-                  <img
-                    :style="{width:'100px',height:'100px'}"
-                    v-for="(item,index) in information.caseDiagram"
-                    :key="index"
-                    :src="item"
-                    alt
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="其他证书">
-                  <img
-                    :style="{width:'100px',height:'100px'}"
-                    v-for="(item,index) in information.otherCertificate"
-                    :key="index"
-                    :src="item"
-                    alt
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="个人介绍">
-                  <img
-                    :style="{width:'100px',height:'100px'}"
-                    v-for="(item,index) in information.introduction"
-                    :key="index"
-                    :src="item"
-                    alt
-                  />
-                </el-form-item>
-              </el-col>
-            </el-row>
           </el-col>
           <el-col :span="4">
             <div class="images">
-              <img :style="{width:'100px',height:'100px'}" :src="information.portrait" alt />
+              <img :style="{width:'178px',height:'178px'}" :src="information.portrait" alt />
             </div>
           </el-col>
         </el-row>
-      </el-form>
-
-      <!-- <el-row>
-        <el-col :span="12">
-          <el-row>
-            <el-col :span="8">
-              <p>名&nbsp;&nbsp;字</p>
-              <span>{{information.fullName}}</span>
-            </el-col>
-            <el-col :span="8">
-              <p>性&nbsp;&nbsp;别</p>
-              <span>{{information.gender}}</span>
-            </el-col>
-            <el-col :span="8">
-              <p>国&nbsp;&nbsp;家</p>
-              <span>{{information.country}}</span>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <p>邮&nbsp;&nbsp;箱</p>
-              <span>{{information.mailbox}}</span>
-            </el-col>
-            <el-col :span="8">
-              <p>从业时间</p>
-              <span>{{information.time}}</span>
-            </el-col>
-            <el-col :span="8">
-              <p>职&nbsp;&nbsp;称</p>
-              <span>{{information.occupationTitle}}</span>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col :span="8">
-              <p>擅&nbsp;&nbsp;长</p>
-              <span v-for="(item,index) in information.beGoodAte" :key="index">{{item}}</span>
-            </el-col>
-            <el-col :span="8">
-              <p>手机号</p>
-              <span>{{information.telephone}}</span>
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <h3>医师执业证</h3>
+        <el-row>
+          <el-col>
+            <el-form-item label="医师执业证">
               <img
                 :style="{width:'100px',height:'100px'}"
                 v-for="(item,index) in information.certificateOfPractice"
@@ -200,11 +93,12 @@
                 :src="item"
                 alt
               />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <h3>医师资格证</h3>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="医师资格证">
               <img
                 :style="{width:'100px',height:'100px'}"
                 v-for="(item,index) in information.qualifications"
@@ -212,11 +106,12 @@
                 :src="item"
                 alt
               />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <h3>案例图</h3>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="案例图">
               <img
                 :style="{width:'100px',height:'100px'}"
                 v-for="(item,index) in information.caseDiagram"
@@ -224,11 +119,12 @@
                 :src="item"
                 alt
               />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <h3>其他证书</h3>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="其他证书">
               <img
                 :style="{width:'100px',height:'100px'}"
                 v-for="(item,index) in information.otherCertificate"
@@ -236,11 +132,12 @@
                 :src="item"
                 alt
               />
-            </el-col>
-          </el-row>
-          <el-row>
-            <el-col>
-              <h3>个人介绍</h3>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="个人介绍">
               <img
                 :style="{width:'100px',height:'100px'}"
                 v-for="(item,index) in information.introduction"
@@ -248,15 +145,10 @@
                 :src="item"
                 alt
               />
-            </el-col>
-          </el-row>
-        </el-col>
-        <el-col :span="8">
-          <div class="images">
-            <img :style="{width:'100px',height:'100px'}" :src="information.portrait" alt />
-          </div>
-        </el-col>
-      </el-row>-->
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
     </div>
 
     <el-row>
@@ -311,22 +203,26 @@ export default {
 
 <style lang="less" scoped>
 .main {
-  padding-left: 90px;
-  padding-right: 90px;
-  padding-top: 83px;
-  background: #fff;
+  padding-top: 35px;
+  background: rgba(245, 246, 250, 1);
   border-radius: 13px;
+  overflow: hidden;
   h2 {
     font-size: 13px;
     font-family: PingFangSC-Semibold, PingFang SC;
     font-weight: 600;
-    color: rgba(53, 179, 188, 1);
+    // color: rgba(53, 179, 188, 1);
+    color: rgba(117, 117, 117, 1);
     line-height: 13px;
-    margin-bottom: 32px;
+    margin-bottom: 25px;
+    margin-left: 30px;
   }
   .content {
+    min-height: 600px;
     background: rgba(255, 255, 255, 1);
-    padding: 20px 30px;
+    padding: 50px 90px;
+    margin: 0 30px;
+    border: 1px solid rgba(225, 225, 225, 1);
   }
   .result {
     p {
@@ -418,15 +314,20 @@ export default {
     }
   }
   .edit {
+    width: 100%;
+    background: #fff;
+    height: 105px;
     border-radius: 2px;
     font-size: 14px;
     font-family: PingFangSC-Medium, PingFang SC;
     font-weight: 500;
     color: rgba(255, 255, 255, 1);
     text-align: center;
-    margin: 30px auto;
+    margin: 0 auto;
+    margin-top: 90px;
     cursor: pointer;
     /deep/ .el-button--primary {
+      margin: 40px auto;
       color: #fff;
       background-color: rgba(53, 179, 188, 1);
       border-color: rgba(53, 179, 188, 1);

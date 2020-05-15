@@ -23,7 +23,7 @@
               <i class="el-icon-bell" :style="{fontSize:'20px',color:'#fff'}" @click="goNotice"></i>
             </el-badge>
 
-            <el-avatar :src="userData.portrait" :size="44" :style="{marginLeft:'34px'}"></el-avatar>
+            <el-avatar :src="userData.portrait" fit="scale-down" :style="{marginLeft:'34px'}"></el-avatar>
             <span>{{userData.fullName}}</span>
           </div>
         </div>
@@ -275,7 +275,7 @@ export default {
     },
     // 跳转到消息通知页面
     goNotice() {
-      this.$router.push({ path: "/notice/msgNotice" });
+      this.$router.push({ path: "/notice/sysNotice" });
     }
   }
 };

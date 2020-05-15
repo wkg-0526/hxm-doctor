@@ -1,46 +1,14 @@
 <template>
   <div class="main">
+    <el-row>
+      <el-col>
+        <h2>医生管理 &gt;&gt; 修改个人信息</h2>
+      </el-col>
+    </el-row>
+    <h3>修改医生信息</h3>
     <div class="content">
       <el-row>
-        <el-col>
-          <h2>医生个人信息</h2>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
-          <el-form :label-position="labelPosition" label-width="100px" :model="portraitFile">
-            <el-form-item label="头像">
-              <!-- <el-upload
-                :action="http+'/operate/upload.json'"
-                :on-remove="handleRemove"
-                :before-upload="beforeAvatarUpload"
-                :on-success="handleAvatarPortraitFile"
-                class="upload-wrapper"
-                :show-file-list="false"
-              >-->
-              <input
-                type="file"
-                name="image"
-                accept="image/*"
-                id="fileInput"
-                @change="onchangeImgFun"
-                class="header-upload-btn user-header-com"
-              />
-              <img
-                v-if="imgUrl"
-                :style="{width:'100px',height:'100px'}"
-                :src="imgUrl"
-                alt
-                class="user-header-img user-header-com"
-              />
-              <i v-else slot="default" class="el-icon-camera"></i>
-              <!-- </el-upload> -->
-            </el-form-item>
-          </el-form>
-        </el-col>
-      </el-row>
-      <el-row>
-        <el-col>
+        <el-col :span="16">
           <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
             <el-row>
               <el-col :span="11">
@@ -87,21 +55,10 @@
                   <el-input
                     v-model="formLabelAlign.telephone"
                     placeholder="请输入手机号"
-                    oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+                    oninput="this.value=this.value.replace(/[^\d.]/g,'')"
                   ></el-input>
                 </el-form-item>
               </el-col>
-              <el-col :span="11">
-                <el-form-item label="邮箱">
-                  <el-input
-                    v-model="formLabelAlign.mailbox"
-                    placeholder="请输入邮箱"
-                    oninput="this.value=this.value.replace(/[^\d.]/g,'');"
-                  ></el-input>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
               <el-col :span="11">
                 <el-form-item label="擅长">
                   <el-select v-model="formLabelAlign.beGoodAte[0]" placeholder="请选择">
@@ -114,177 +71,210 @@
                   </el-select>
                 </el-form-item>
               </el-col>
+            </el-row>
+            <el-row>
+              <el-col :span="11">
+                <el-form-item label="邮箱">
+                  <el-input
+                    v-model="formLabelAlign.mailbox"
+                    placeholder="请输入邮箱"
+                    oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+                  ></el-input>
+                </el-form-item>
+              </el-col>
+
               <el-col :span="12">
                 <el-form-item label="从业时间">
                   <el-date-picker v-model="formLabelAlign.time" type="date" placeholder="选择日期"></el-date-picker>
                 </el-form-item>
               </el-col>
             </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="医师执业证">
-                  <img
-                    :style="{ float: 'left' }"
-                    width="100px"
-                    height="100px"
-                    v-for="(item,
-                    index) in formLabelAlign.certificateOfPractice"
-                    :key="index"
-                    :src="item"
-                    @click="delCertificateOfPractice(index)"
-                    alt
-                  />
-
-                  <el-upload
-                    v-show="formLabelAlign.certificateOfPractice.length>2?false:true"
-                    action="/operate/upload.json"
-                    list-type="picture-card"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleCertificateOfPractice"
-                    class="upload-wrapper"
-                    :show-file-list="false"
-                  >
-                    <i slot="default" class="el-icon-plus"></i>
-                  </el-upload>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="医师资格证">
-                  <div v-for="(item, index) in formLabelAlign.qualifications" :key="index">
-                    <img
-                      :style="{ float: 'left' }"
-                      width="100px"
-                      height="100px"
-                      :src="item"
-                      alt
-                      @click="delQualifications(index)"
-                    />
-                  </div>
-
-                  <el-upload
-                    v-show="formLabelAlign.qualifications.length>2?false:true"
-                    action="/operate/upload.json"
-                    list-type="picture-card"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleQualifications"
-                    class="upload-wrapper"
-                    :show-file-list="false"
-                  >
-                    <i slot="default" class="el-icon-plus"></i>
-                  </el-upload>
-                </el-form-item>
-              </el-col>
-            </el-row>
-            <el-row>
-              <el-col>
-                <el-form-item label="案例图">
-                  <img
-                    :style="{ float: 'left' }"
-                    width="100px"
-                    height="100px"
-                    v-for="(item, index) in formLabelAlign.caseDiagram"
-                    :key="index"
-                    :src="item"
-                    @click="delCaseDiagram(index)"
-                    alt
-                  />
-                  <el-upload
-                    v-show="formLabelAlign.caseDiagram.length>2?false:true"
-                    action="/operate/upload.json"
-                    list-type="picture-card"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleCaseDiagram"
-                    class="upload-wrapper"
-                    :show-file-list="false"
-                  >
-                    <i slot="default" class="el-icon-plus"></i>
-                  </el-upload>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col>
-                <el-form-item label="其他证书">
-                  <img
-                    :style="{ float: 'left' }"
-                    width="100px"
-                    height="100px"
-                    v-for="(item, index) in formLabelAlign.otherCertificate"
-                    :key="index"
-                    :src="item"
-                    @click="delOtherCertificate(index)"
-                    alt
-                  />
-                  <el-upload
-                    v-show="formLabelAlign.otherCertificate.length>2?false:true"
-                    action="/operate/upload.json"
-                    list-type="picture-card"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleOtherCertificate"
-                    class="upload-wrapper"
-                    :show-file-list="false"
-                  >
-                    <i slot="default" class="el-icon-plus"></i>
-                  </el-upload>
-                </el-form-item>
-              </el-col>
-            </el-row>
-
-            <el-row>
-              <el-col>
-                <el-form-item label="个人介绍">
-                  <div v-for="(item, index) in formLabelAlign.introduction" :key="index">
-                    <img
-                      :style="{ float: 'left' }"
-                      width="100px"
-                      height="100px"
-                      :src="item"
-                      alt
-                      @click="delIntroduction(index)"
-                    />
-                  </div>
-
-                  <el-upload
-                    action="/operate/upload.json"
-                    list-type="picture-card"
-                    :on-remove="handleRemove"
-                    :before-upload="beforeAvatarUpload"
-                    :on-success="handleIntroduction"
-                    class="upload-wrapper"
-                    :show-file-list="false"
-                    v-show="formLabelAlign.introduction.length < 9"
-                  >
-                    <i
-                      slot="default"
-                      class="el-icon-plus"
-                      v-show="formLabelAlign.introduction.length < 9"
-                    ></i>
-                  </el-upload>
-                </el-form-item>
-              </el-col>
-            </el-row>
+          </el-form>
+        </el-col>
+        <el-col :span="4">
+          <el-form :label-position="labelPosition" label-width="0" :model="portraitFile">
+            <el-form-item label>
+              <input
+                type="file"
+                name="image"
+                accept="image/*"
+                id="fileInput"
+                @change="onchangeImgFun"
+                class="header-upload-btn user-header-com"
+              />
+              <img
+                v-if="imgUrl"
+                :style="{width:'178px',height:'178px'}"
+                :src="imgUrl"
+                alt
+                class="user-header-img user-header-com"
+              />
+              <i v-else slot="default" class="el-icon-camera"></i>
+            </el-form-item>
           </el-form>
         </el-col>
       </el-row>
-      <el-row>
-        <el-col :span="4">
-          <div class="sendInfo">
-            <el-button type="primary" @click="sendInfo">提交审核</el-button>
-          </div>
-        </el-col>
-        <el-col :span="4">
-          <div class="sendInfo">
-            <el-button @click="goBack">取消</el-button>
-          </div>
-        </el-col>
-      </el-row>
+      <el-form :label-position="labelPosition" label-width="100px" :model="formLabelAlign">
+        <el-row>
+          <el-col>
+            <el-form-item label="医师执业证">
+              <img
+                :style="{ float: 'left' }"
+                width="100px"
+                height="100px"
+                v-for="(item,
+                    index) in formLabelAlign.certificateOfPractice"
+                :key="index"
+                :src="item"
+                @click="delCertificateOfPractice(index)"
+                alt
+              />
+
+              <el-upload
+                v-show="formLabelAlign.certificateOfPractice.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleCertificateOfPractice"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="医师资格证">
+              <div v-for="(item, index) in formLabelAlign.qualifications" :key="index">
+                <img
+                  :style="{ float: 'left' }"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                  @click="delQualifications(index)"
+                />
+              </div>
+
+              <el-upload
+                v-show="formLabelAlign.qualifications.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleQualifications"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+        <el-row>
+          <el-col>
+            <el-form-item label="案例图">
+              <img
+                :style="{ float: 'left' }"
+                width="100px"
+                height="100px"
+                v-for="(item, index) in formLabelAlign.caseDiagram"
+                :key="index"
+                :src="item"
+                @click="delCaseDiagram(index)"
+                alt
+              />
+              <el-upload
+                v-show="formLabelAlign.caseDiagram.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleCaseDiagram"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-form-item label="其他证书">
+              <img
+                :style="{ float: 'left' }"
+                width="100px"
+                height="100px"
+                v-for="(item, index) in formLabelAlign.otherCertificate"
+                :key="index"
+                :src="item"
+                @click="delOtherCertificate(index)"
+                alt
+              />
+              <el-upload
+                v-show="formLabelAlign.otherCertificate.length>2?false:true"
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleOtherCertificate"
+                class="upload-wrapper"
+                :show-file-list="false"
+              >
+                <i slot="default" class="el-icon-plus"></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+
+        <el-row>
+          <el-col>
+            <el-form-item label="个人介绍">
+              <div v-for="(item, index) in formLabelAlign.introduction" :key="index">
+                <img
+                  :style="{ float: 'left' }"
+                  width="100px"
+                  height="100px"
+                  :src="item"
+                  alt
+                  @click="delIntroduction(index)"
+                />
+              </div>
+
+              <el-upload
+                action="/operate/upload.json"
+                list-type="picture-card"
+                :on-remove="handleRemove"
+                :before-upload="beforeAvatarUpload"
+                :on-success="handleIntroduction"
+                class="upload-wrapper"
+                :show-file-list="false"
+                v-show="formLabelAlign.introduction.length < 9"
+              >
+                <i
+                  slot="default"
+                  class="el-icon-plus"
+                  v-show="formLabelAlign.introduction.length < 9"
+                ></i>
+              </el-upload>
+            </el-form-item>
+          </el-col>
+        </el-row>
+      </el-form>
+    </div>
+    <div class="editor">
+      <div class="edit">
+        <div class="sendInfo">
+          <el-button type="primary" @click="sendInfo">提交审核</el-button>
+          <el-button @click="goBack">取消</el-button>
+        </div>
+        <div class="sendInfo"></div>
+      </div>
     </div>
   </div>
 </template>
@@ -298,7 +288,7 @@ export default {
     return {
       http: "http://1669260du6.iok.la",
       labelPosition: "left",
-      sex: ["男", "女"],
+      sex: ["男", "女", "不选择"],
       doctors: ["主治医生"],
       imgUrl: "",
       formLabelAlign: {
@@ -487,15 +477,39 @@ export default {
 
 <style lang="less" scoped>
 .main {
-  padding: 83px 0 0 0px;
-
+  padding-top: 35px;
+  background: rgba(245, 246, 250, 1);
+  border-radius: 13px;
+  overflow: hidden;
+  h2 {
+    font-size: 13px;
+    font-family: PingFangSC-Semibold, PingFang SC;
+    font-weight: 600;
+    color: rgba(117, 117, 117, 1);
+    line-height: 13px;
+    margin-bottom: 32px;
+    margin-left: 30px;
+  }
+  h3 {
+    height: 60px;
+    background: rgba(243, 247, 247, 1);
+    border: 1px solid rgba(225, 225, 225, 1);
+    border-bottom: 0;
+    margin: 0 30px;
+    text-align: center;
+    line-height: 60px;
+    font-size: 16px;
+    font-family: PingFangSC-Semibold, PingFang SC;
+    font-weight: 600;
+    color: rgba(40, 40, 40, 1);
+  }
   .content {
-    width: 900px;
-    margin: 0 auto;
+    margin: 0 30px;
+    min-height: 600px;
     overflow: hidden;
     background: rgba(255, 255, 255, 1);
-    // border: 1px solid rgba(225, 225, 225, 1);
-    padding-left: 100px;
+    border: 1px solid rgba(225, 225, 225, 1);
+    padding: 50px 90px;
 
     .sendInfo {
       margin-bottom: 30px;
@@ -503,15 +517,7 @@ export default {
       margin-left: 230px;
     }
   }
-  h2 {
-    font-size: 13px;
-    font-family: PingFangSC-Semibold, PingFang SC;
-    font-weight: 600;
-    color: rgba(53, 179, 188, 1);
-    line-height: 13px;
-    margin-bottom: 32px;
-    margin-top: 30px;
-  }
+
   .el-form-item {
     margin-right: 50px;
   }
@@ -589,6 +595,28 @@ export default {
     font-size: 12px;
     color: tomato;
     margin-left: 10px;
+  }
+  .editor {
+    width: 100%;
+    background: #fff;
+    height: 105px;
+    border-radius: 2px;
+    font-size: 14px;
+    font-family: PingFangSC-Medium, PingFang SC;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
+    text-align: center;
+    margin: 0 auto;
+    margin-top: 90px;
+    cursor: pointer;
+    .edit {
+      width: 30%;
+      margin: 40px auto;
+      .el-button--primary {
+        margin-right: 70px;
+        margin-top: 40px;
+      }
+    }
   }
 }
 </style>

@@ -149,7 +149,7 @@
                 style="width: 280px"
                 placeholder="请输入设计费"
                 v-model.trim="paramForm.designFee"
-                oninput="this.value=this.value.replace(/[^\d.]/g,'');"
+                oninput="this.value=this.value.replace(/[^\d.]/g,'')"
                 clearable
               >
                 <template slot="append">元（RMB）</template>
@@ -253,7 +253,7 @@
     <!-- 焦点图 -->
     <div class="good-focusImg pb30">
       <div class="pb30">
-        <span style="padding-right: 30px" class="good-title">焦点图</span>
+        <span style="padding-right: 30px" class="good-title">焦点图（头图）</span>
         <span class="good-title-desc">请上传750x750像素的图片，第一张为封面，最多五张</span>
       </div>
 

@@ -128,7 +128,7 @@
 
     <!-- 焦点图 -->
     <div class="good-focusImg pb30">
-      <div class="good-title">焦点图</div>
+      <div class="good-title">焦点图（头图）</div>
       <section
         style="display: inline-block;margin-left: -14px;margin-right: -14px;"
         class="img-wrapper"
@@ -152,10 +152,10 @@
 </template>
 
 <script>
-import Api from "@/api/index.js"
-import classification from "@/components/goodClassification.js"
-import editor from "@/components/editor.vue"
-import format from "date-fns/format"
+import Api from "@/api/index.js";
+import classification from "@/components/goodClassification.js";
+import editor from "@/components/editor.vue";
+import format from "date-fns/format";
 
 export default {
   components: {
@@ -171,7 +171,7 @@ export default {
       default: () => {
         return {
           category: "shopCategory"
-        }
+        };
       }
     },
     type: {
@@ -180,10 +180,10 @@ export default {
     }
   },
   data() {
-    return {}
+    return {};
   },
   methods: {}
-}
+};
 </script>
 
 <style lang='less' scoped>

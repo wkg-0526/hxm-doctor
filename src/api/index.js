@@ -8,6 +8,7 @@ import picture from "./picture";
 import order from "./order";
 import good from "./good";
 import aply from "./aply";
+import notice from "./notice";
 
 export default {
   // 登录
@@ -141,6 +142,7 @@ export default {
   ...order,
   ...good,
   ...aply,
+  ...notice,
   // ===== 资料设置
   // 机构查询机构资料(已认证机构修改资料使用)
   appFindHospitalDetailAuthentication(param, callbak) {

@@ -24,7 +24,7 @@
           <el-form-item label="分账模式">
             <el-row>
               <el-col :span="8">
-                <el-input v-model="formLabelAlign.separat"></el-input>
+                <el-input v-model="formLabelAlign.separat" disabled></el-input>
               </el-col>
             </el-row>
           </el-form-item>
@@ -90,7 +90,7 @@ export default {
     this.findDoctorPhone();
     this.findUserMoney();
     this.findUserBindAlipayInfo();
-
+    this.findDoctorCooperationMode();
     this.url = location.origin + location.pathname + location.hash;
     this.auth_code = location.search.substring(location.search.indexOf("auth_code")).substring(10);
     if (this.auth_code) {
@@ -158,6 +158,15 @@ export default {
     // 医生绑定支付宝
     insertBindAlipayInfo() {
       Api.insertBindAlipayInfo({ auth_code: this.auth_code }).then(res => {});
+    },
+    // 查询医生分账模式
+    findDoctorCooperationMode() {
+      Api.findDoctorCooperationMode().then(res => {
+        console.log(res.data);
+        if (res.status === 200 && res.data) {
+          this.formLabelAlign.separat = res.data.mode;
+        }
+      });
     },
     changeHandle() {}
   }
@@ -246,6 +255,11 @@ export default {
   /deep/ .el-radio__input.is-checked .el-radio__inner {
     border-color: rgba(53, 179, 188, 1);
     background: rgba(53, 179, 188, 1);
+  }
+  .el-input.is-disabled .el-input__inner {
+    background-color: #fff;
+    border-color: #fff;
+    color: #fff;
   }
 }
 </style>

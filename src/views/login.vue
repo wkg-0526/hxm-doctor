@@ -3,19 +3,20 @@
     <div class="login-main">
       <div class="login-left">
         <div class="login-left-main">
-          <div>
+          <!-- <div>
             <img src="../assets/images/logo3.png" alt="logo" />
           </div>
           <div class="title">医美邦</div>
-          <div class="text">医生后台登录入口</div>
+          <div class="text">医生后台登录入口</div>-->
         </div>
       </div>
       <div class="login-right">
-        <div class="title">医生账号密码登录</div>
+        <!-- <div class="title">医生账号密码登录</div> -->
         <div class="login-form">
           <el-form labelPosition="top" :model="loginForm" :rules="rules" ref="loginForm">
             <el-form-item prop="userAccount">
               <el-input
+                prefix-icon="el-icon-user-solid"
                 :class="['login-input',loginForm.userAccount.length > 0 && 'login-input-white']"
                 placeholder="请输入账号"
                 v-model="loginForm.userAccount"
@@ -23,6 +24,7 @@
               ></el-input>
             </el-form-item>
             <el-form-item prop="userPassword">
+              <img class="passwordImg" src="../assets/images/password.png" alt />
               <el-input
                 class="login-input"
                 @keyup.enter="submitForm"
@@ -33,8 +35,10 @@
               />
             </el-form-item>
           </el-form>
-          <div class="login-btn">
-            <el-button :disabled="disabled" class="footer-btn" @click="submitForm" round>登录</el-button>
+          <div class="login-btn" @click="submitForm">
+            <!-- <img :src="require('../assets/images/loginBtn.png')" alt /> -->
+            <h2>登录</h2>
+            <!-- <el-button :disabled="disabled" class="footer-btn" @click="submitForm" round>登录</el-button> -->
           </div>
           <el-row class="extra-btn">
             <!-- <el-col :span="12">
@@ -194,7 +198,7 @@ export default {
 @text-color: #989898;
 .login-wrapper {
   min-height: 100vh;
-  background: url("../assets/images/bg.png");
+  background: rgba(240, 244, 245, 1);
   background-size: cover;
   background-position: bottom center;
 }
@@ -217,7 +221,7 @@ export default {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(180deg, rgba(250, 217, 97, 1) 0%, rgba(247, 107, 28, 1) 100%);
+  // background: linear-gradient(180deg, rgba(250, 217, 97, 1) 0%, rgba(247, 107, 28, 1) 100%);
   .title {
     font-weight: bold;
     position: absolute;
@@ -259,52 +263,121 @@ export default {
   top: 50%;
   margin-left: -449px;
   margin-top: -256px;
-  // background: url("../assets/images/main-bg.png");
+  background: url("../assets/images/doctorlogin.png") no-repeat;
   // background-size: cover;
 }
 .login-form {
   position: absolute;
-  right: 122px;
-  top: 204px;
-  width: 266px;
+  top: 144px;
+  right: 0;
+  width: 390px;
   .login-input {
     .el-input__inner {
+      font-size: 18px;
       border-radius: 20px;
+      background: rgba(255, 255, 255, 1);
+      color: rgba(223, 222, 228, 1);
     }
   }
 }
 .login-btn {
-  width: 100%;
+  margin-left: -20px;
+  height: 113px;
+  width: 390px;
+  background: url("../assets/images/loginBtn.png") no-repeat;
+  line-height: 90px;
+  text-align: center;
+  cursor: pointer;
+  h2 {
+    font-size: 24px;
+    font-family: PingFang-SC-Medium, PingFang-SC;
+    font-weight: 500;
+    color: rgba(255, 255, 255, 1);
+  }
   .footer-btn {
     width: 100%;
-    background: #fdf3ea;
+
     color: #ff8232;
     // border-radius: 20px;
   }
 }
 .extra-btn {
-  padding-top: 20px;
-  color: #fff;
+  padding-top: 10px;
+  padding-right: 40px;
+  color: #62c7ce;
+}
+.passwordImg {
+  position: absolute;
+  z-index: 1;
+  top: 26px;
+  left: 48px;
 }
 </style>
 <style lang='less'>
 .login-form {
   .login-input {
     .el-input__inner {
-      border: none;
-      border-radius: 20px;
-      background: rgba(255, 255, 255, 0.7);
+      font-size: 18px;
+      width: 350px;
+
+      height: 73px;
+      background: rgba(255, 255, 255, 1);
+      border-radius: 37px;
+      border: 2px solid rgba(241, 241, 241, 1);
+      text-align: center;
+
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: rgba(40, 40, 40, 1);
     }
     .el-input__inner::-ms-input-placeholder {
       text-align: center;
+      font-size: 18px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: rgba(223, 222, 228, 1);
     }
     .el-input__inner::-webkit-input-placeholder {
       text-align: center;
+      font-size: 18px;
+      font-family: PingFangSC-Medium, PingFang SC;
+      font-weight: 500;
+      color: rgba(223, 222, 228, 1);
     }
+  }
+  .el-input__suffix {
+    margin-right: 60px;
+  }
+  .el-icon-user-solid {
+    font-size: 25px;
+    margin-left: 40px;
+    color: #dfdee4;
+    margin-top: 4px;
   }
   .login-input-white {
     input.el-input__inner {
+      color: rgba(40, 40, 40, 1);
+      width: 350px;
+      height: 73px;
+      font-size: 18px;
       background: #fff;
+      border-radius: 37px;
+      border: 2px solid rgba(241, 241, 241, 1);
+      &::-webkit-input-placeholder {
+        font-size: 18px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: rgba(223, 222, 228, 1);
+      }
+      &::-ms-input-placeholder {
+        font-size: 18px;
+        font-family: PingFangSC-Medium, PingFang SC;
+        font-weight: 500;
+        color: rgba(223, 222, 228, 1);
+      }
+    }
+    input:-internal-autofill-selected {
+      background-color: #fff !important;
     }
   }
 }
