@@ -8,6 +8,7 @@
 <script>
 import notice from "./components/notice";
 import Api from "@/api/index.js";
+import { mapState } from "vuex";
 export default {
   name: "activeNotice",
   components: {
@@ -19,12 +20,24 @@ export default {
       params: { type: 0, page: 1 }
     };
   },
+  computed: {
+    ...mapState({
+      noticeData: state => state.noticeData
+    })
+  },
   created() {
     // this.doctorFindUnreadCount();
-
+this.doctorFindUnreadCount();
     this.doctorFindNewsAll(this.params);
   },
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     // 医生查询系统消息和活动消息
     doctorFindNewsAll(params) {
       Api.doctorFindNewsAll({ ...params }).then(res => {
@@ -36,20 +49,24 @@ export default {
       Api.insertSystemUser({ newId }).then(res => {
         if (res.status === 20 && res.data) {
           this.doctorFindNewsAll(this.params);
+          this.doctorFindUnreadCount();
         }
       });
     },
     getRead(data) {
       this.params.status = data;
       this.doctorFindNewsAll(this.params);
+      this.doctorFindUnreadCount();
     },
     getId(data) {
       console.log(data);
       this.insertSystemUser(data);
+      this.doctorFindUnreadCount();
     },
     getpage(data) {
       this.params.page = data;
       this.doctorFindNewsAll(this.params);
+      this.doctorFindUnreadCount();
     }
   }
 };

@@ -15,8 +15,8 @@
 
           <div class="conteainer-logo-user">
             <el-badge
-              :value="noticeData"
-              :hidden="noticeData===0?true:false"
+              :value="noticeData.unReadCount"
+              :hidden="noticeData.unReadCount===0?true:false"
               class="item"
               @click="goNotice"
             >
@@ -158,6 +158,7 @@ export default {
     console.log(this.noticeData, 11);
     this.url = localStorage.getItem("url");
     this.username = localStorage.getItem("username");
+    // this.doctorFindUnreadCount();
   },
   updated: function() {
     /* 判断显示的组件 */
@@ -168,13 +169,12 @@ export default {
       this.path = "full";
     } else {
       this.path = "default";
-      // this.doctorFindUnreadCount();
     }
     this.setAdminMenu();
   },
   mounted() {
     this.setAdminMenu();
-    // this.doctorFindUnreadCount();
+    this.doctorFindUnreadCount();
     const openeds = [];
     for (let i = 0; i < this.$router.options.routes.length; i++) {
       if (this.$route.path.indexOf(this.$router.options.routes[i].path) > -1) {
@@ -191,6 +191,13 @@ export default {
     // console.log(this.$router);
   },
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     // 获取用户信息
     getUserInfo() {
       Api["findAuthenticationDoctorDeatail"]({})
@@ -275,7 +282,15 @@ export default {
     },
     // 跳转到消息通知页面
     goNotice() {
-      this.$router.push({ path: "/notice/sysNotice" });
+      if (this.noticeData.interaction !== 0) {
+        this.$router.push({ path: "/notice/interNotice" });
+      } else if (this.noticeData.activity !== 0) {
+        this.$router.push({ path: "/notice/activeNotice" });
+      } else if (this.noticeData.authentication !== 0) {
+        this.$router.push({ path: "/notice/authNotice" });
+      } else {
+        this.$router.push({ path: "/notice/sysNotice" });
+      }
     }
   }
 };

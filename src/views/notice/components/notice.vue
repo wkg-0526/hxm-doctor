@@ -154,7 +154,7 @@
                     <div>
                       <p
                         class="seeNotice"
-                        @click="goHospitalDetail(item)"
+                        @click="item.hospitalId?goHospitalDetail(item):''"
                         :style="{color:item.hospitalId?'rgba(53, 179, 188, 1)':''}"
                       >{{ item.content }}</p>
                     </div>
@@ -320,7 +320,7 @@
 <script>
 import Api from "@/api/index.js";
 import format from "date-fns/format";
-import { mapState, mapActions, mapGetter } from "vuex";
+import { mapState } from "vuex";
 export default {
   name: "msgNotice",
   props: ["listProp"],
@@ -333,7 +333,7 @@ export default {
       dialogRead: false,
       count: 0,
       hosDetail: {},
-      unReadCount: 0,
+
       btn: ["全部", "已读", "未读"],
       activeIndex: 0,
       isFlod: true,
@@ -341,18 +341,23 @@ export default {
       dialogData: {}
     };
   },
-  computed: {
+ computed: {
     ...mapState({
       noticeData: state => state.noticeData
     })
   },
-  created() {
-    this.$store.dispatch("setNoticeData", this.unReadCount);
-  },
+  created() {},
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        console.log(res.data);
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     handleSizeChange(val) {
       console.log(`每页 ${val} 条`);
-      // this.doctorfindSystemNewInfo(val);
       this.$emit("page", val);
     },
     handleCurrentChange(val) {
@@ -372,6 +377,7 @@ export default {
         }
       });
     },
+
     // 已读未读按钮
     btnHandle(index) {
       this.activeIndex = index;
@@ -389,7 +395,6 @@ export default {
     open(data) {
       this.dialogRead = true;
       this.dialogData = data;
-      console.log(data);
     },
 
     // 传guid主键
@@ -403,7 +408,7 @@ export default {
     },
     affrim(data) {
       this.dialogRead = false;
-      if (data.whetherRead === 1) {
+      if (data.whetherRead === 0) {
         this.$emit("newId", data.newId);
       }
     }

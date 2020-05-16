@@ -9,6 +9,7 @@
 import notice from "./components/notice";
 import Api from "@/api/index.js";
 import format from "date-fns/format";
+import { mapState } from "vuex";
 export default {
   name: "authNotice",
   components: {
@@ -17,13 +18,27 @@ export default {
   data() {
     return {
       list: [],
-      params: { page: 1 }
+      params: { page: 1 },
+      unReadCount: {}
     };
+  },
+  computed: {
+    ...mapState({
+      noticeData: state => state.noticeData
+    })
   },
   created() {
     this.doctorFindauthenticationNews(this.params);
+    this.doctorFindUnreadCount();
   },
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     // 查询医生系统认证消息
     doctorFindauthenticationNews(params) {
       Api.doctorFindauthenticationNews({ ...params }).then(res => {
@@ -40,20 +55,24 @@ export default {
       Api.doctorUpdateUserNewsWhetherRead({ guid }).then(res => {
         if (res.data && res.status === 200) {
           this.doctorFindauthenticationNews(this.params);
+          this.doctorFindUnreadCount();
         }
       });
     },
     getRead(data) {
       this.params.whetherRead = data;
       this.doctorFindauthenticationNews(this.params);
+      this.doctorFindUnreadCount();
     },
     getpage(data) {
       this.params.page = data;
       this.doctorFindauthenticationNews(this.params);
+      this.doctorFindUnreadCount();
     },
     updeatGuid(data) {
       if (data.whetherRead === 0) {
         this.doctorUpdateUserNewsWhetherRead(data.guid);
+        this.doctorFindUnreadCount();
       }
     }
   }

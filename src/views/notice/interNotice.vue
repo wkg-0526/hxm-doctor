@@ -9,6 +9,7 @@
 import notice from "./components/notice";
 import Api from "@/api/index.js";
 import format from "date-fns/format";
+import { mapState } from "vuex";
 export default {
   name: "authNotice",
   components: {
@@ -17,13 +18,27 @@ export default {
   data() {
     return {
       list: {},
-      params: { page: 1 }
+      params: { page: 1 },
+      unReadCount: {}
     };
+  },
+  computed: {
+    ...mapState({
+      noticeData: state => state.noticeData
+    })
   },
   created() {
     this.doctorFindNews(this.params);
+    this.doctorFindUnreadCount();
   },
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     doctorFindNews(params) {
       Api.doctorFindNews({ ...params }).then(res => {
         if (res.status === 200 && res.data) {
@@ -37,20 +52,24 @@ export default {
     doctorUpdateDoctorNewsWhetherRead(guid) {
       Api.doctorUpdateDoctorNewsWhetherRead({ guid }).then(res => {
         this.doctorFindNews(this.params);
+        this.doctorFindUnreadCount();
       });
     },
     updeatGuid(data) {
       if (data.whetherRead === 0) {
         this.doctorUpdateDoctorNewsWhetherRead(data.guid);
+        this.doctorFindUnreadCount();
       }
     },
     getpage(data) {
       this.params.page = data;
       this.doctorFindNews(this.params);
+      this.doctorFindUnreadCount();
     },
     getRead(data) {
       this.params.whetherRead = data;
       this.doctorFindNews(this.params);
+      this.doctorFindUnreadCount();
     }
   }
 };

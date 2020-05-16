@@ -8,7 +8,7 @@ export default new Vuex.Store({
     // 用户信息
     userData: {},
     // 消息通知
-    noticeData: 0
+    noticeData: {}
   },
   mutations: {
     SETUSERDATA(state, payload) {

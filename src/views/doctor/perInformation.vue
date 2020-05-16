@@ -176,10 +176,23 @@ export default {
       information: {}
     };
   },
+  computed: {
+    ...mapState({
+      noticeData: state => state.noticeData
+    })
+  },
   created() {
     this.findAuthenticationDoctorDeatail();
+    this.doctorFindUnreadCount();
   },
   methods: {
+    doctorFindUnreadCount() {
+      Api.doctorFindUnreadCount().then(res => {
+        if (res.data && res.status === 200) {
+          this.$store.dispatch("setNoticeData", res.data);
+        }
+      });
+    },
     findAuthenticationDoctorDeatail() {
       Api.findAuthenticationDoctorDeatail().then(res => {
         if (res.status === 200 && res) {
